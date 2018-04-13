@@ -22,6 +22,9 @@ public class HvacController {
 
     private long lastCompressorDisableTime = 0;
     private long lastCompressorEnableTime = 0;
+
+    private long lastElementDisableTime = 0;
+    private long lastElementEnableTime = 0;
     private long lastFanDisableTime = 0;
     private long lastSettingsUpdate = 0;
 
@@ -91,6 +94,10 @@ public class HvacController {
         }
     }
 
+    /**
+     * @param toggleOn
+     * @param force
+     */
     protected void setCooling(boolean toggleOn, boolean force) {
         if (!force && toggleOn == isCoolingOn) {
             // writeVerbose('*** Cooling unchanged ('+('on' if coolingOn else 'off')+').',True);
@@ -186,12 +193,98 @@ public class HvacController {
 
     }
 
+    /**
+     * @param toggleOn
+     * @param force
+     */
     protected void setHeatingCompressor(boolean toggleOn, boolean force) {
+        if (!force && toggleOn == isHeatingCompressorOn) {
+            // writeVerbose('*** Heating unchanged ('+('on' if heatingOn else 'off')+').',True);
+            return;
+        }
 
+        if (toggleOn) {
+            // # Cannot enable heating if fan is off
+            if (!isFanOn) {
+                // writeVerbose('*** Cannot enable heating if fan is disabled!',True);
+                return;
+            }
+
+            // # Cannot enable heating if A/C is on
+            if (isCoolingOn) {
+                // writeVerbose('*** Cannot enable heating if cooling is on. Must disable cooling first!',True);
+                return;
+            }
+
+            if (System.currentTimeMillis() < (lastCompressorDisableTime + setting.getCompressorRecoveryTime())) {
+                // writeVerbose('*** Cannot enable heating, compressor in recovery.',True);
+                return;
+            }
+
+            // writeVerbose('Enabling heating...');
+            pinHeatingCompessor.high();
+            pinCooling.low();
+            lastCompressorEnableTime = System.currentTimeMillis();
+            isHeatingCompressorOn = true;
+            // writeVerbose('Heating enabled.', True);
+
+        } else {
+            // writeVerbose('Disabling heating...');
+            pinHeatingCompessor.low();
+
+            if (isHeatingCompressorOn) {
+                lastCompressorDisableTime = System.currentTimeMillis();
+            }
+
+            isHeatingCompressorOn = false;
+            // writeVerbose('Heating disabled.', True);
+        }
+        this.delay();
     }
 
     protected void setHeatingElement(boolean toggleOn, boolean force) {
+        if (!force && toggleOn == isHeatingElementOn) {
+            // writeVerbose('*** Heating unchanged ('+('on' if heatingOn else 'off')+').',True);
+            return;
+        }
 
+        if (toggleOn) {
+            // # Cannot enable heating if fan is off
+            if (!isFanOn) {
+                // writeVerbose('*** Cannot enable heating if fan is disabled!',True);
+                return;
+            }
+
+            // # Cannot enable heating if A/C is on
+            if (isCoolingOn) {
+                // writeVerbose('*** Cannot enable heating if cooling is on. Must disable cooling first!',True);
+                return;
+            }
+
+            if (System.currentTimeMillis() < (lastElementDisableTime + setting.getCompressorRecoveryTime())) {
+                // writeVerbose('*** Cannot enable heating, compressor in recovery.',True);
+                return;
+            }
+
+            // writeVerbose('Enabling heating...');
+            pinHeatingCompessor.high();
+            pinCooling.low();
+            lastCompressorEnableTime = System.currentTimeMillis();
+            isHeatingElementOn = true;
+            // writeVerbose('Heating enabled.', True);
+
+        } else {
+            // writeVerbose('Disabling heating...');
+            pinHeatingCompessor.low();
+
+            if (isHeatingElementOn) {
+                lastElementDisableTime = System.currentTimeMillis();
+            }
+
+            isHeatingElementOn = false;
+            // writeVerbose('Heating disabled.', True);
+        }
+        this.delay();
     }
 
 }
