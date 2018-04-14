@@ -25,7 +25,9 @@ public class HvacController {
 
     private long lastElementDisableTime = 0;
     private long lastElementEnableTime = 0;
+
     private long lastFanDisableTime = 0;
+    private long lastFanEnableTime = 0;
     private long lastSettingsUpdate = 0;
 
     private GpioController gpio;
@@ -216,6 +218,12 @@ public class HvacController {
                 return;
             }
 
+            // # Cannot enable heating if A/C is on
+            if (isHeatingElementOn) {
+                // writeVerbose('*** Cannot enable heating if the heating element is on. Must disable heating element first!',True);
+                return;
+            }
+
             if (System.currentTimeMillis() < (lastCompressorDisableTime + setting.getCompressorRecoveryTime())) {
                 // writeVerbose('*** Cannot enable heating, compressor in recovery.',True);
                 return;
@@ -242,6 +250,10 @@ public class HvacController {
         this.delay();
     }
 
+    /**
+     * @param toggleOn
+     * @param force
+     */
     protected void setHeatingElement(boolean toggleOn, boolean force) {
         if (!force && toggleOn == isHeatingElementOn) {
             // writeVerbose('*** Heating unchanged ('+('on' if heatingOn else 'off')+').',True);
@@ -261,21 +273,26 @@ public class HvacController {
                 return;
             }
 
+            // # Cannot enable heating if A/C is on
+            if (isHeatingCompressorOn) {
+                // writeVerbose('*** Cannot enable heating if the compressor heating is on. Must disable compressor heating first!',True);
+                return;
+            }
+
             if (System.currentTimeMillis() < (lastElementDisableTime + setting.getCompressorRecoveryTime())) {
                 // writeVerbose('*** Cannot enable heating, compressor in recovery.',True);
                 return;
             }
 
             // writeVerbose('Enabling heating...');
-            pinHeatingCompessor.high();
-            pinCooling.low();
-            lastCompressorEnableTime = System.currentTimeMillis();
+            pinHeatingElement.high();
+            lastElementEnableTime = System.currentTimeMillis();
             isHeatingElementOn = true;
             // writeVerbose('Heating enabled.', True);
 
         } else {
             // writeVerbose('Disabling heating...');
-            pinHeatingCompessor.low();
+            pinHeatingElement.low();
 
             if (isHeatingElementOn) {
                 lastElementDisableTime = System.currentTimeMillis();
