@@ -8,7 +8,6 @@ import com.pi4j.io.gpio.PinState;
 public class HvacController {
 
     private HvacControllerSetting setting;
-    private TemperatureSetting temperatureSetting;
 
     private GpioPinDigitalOutput pinFan;
     private GpioPinDigitalOutput pinHeatingCompessor;
@@ -41,6 +40,9 @@ public class HvacController {
         this.init();
     }
 
+    /**
+     * 
+     */
     private void init() {
         gpio = GpioFactory.getInstance();
 
@@ -56,6 +58,14 @@ public class HvacController {
         pinCooling = gpio.provisionDigitalOutputPin(setting.getPinCooling(), "Cooling", PinState.LOW);
         pinCooling.setShutdownOptions(true, PinState.LOW);
 
+    }
+
+    /**
+     * @param currentTime
+     * @return
+     */
+    public boolean isCompressorStuck(long currentTime) {
+        return currentTime < (lastCompressorEnableTime + setting.getCompressorStickTime());
     }
 
     /**
@@ -302,6 +312,98 @@ public class HvacController {
             // writeVerbose('Heating disabled.', True);
         }
         this.delay();
+    }
+
+    /**
+     * @return the setting
+     */
+    public HvacControllerSetting getSetting() {
+        return setting;
+    }
+
+    /**
+     * @param setting
+     * the setting to set
+     */
+    public void setSetting(HvacControllerSetting setting) {
+        this.setting = setting;
+    }
+
+    /**
+     * @return the isFanOn
+     */
+    public boolean isFanOn() {
+        return isFanOn;
+    }
+
+    /**
+     * @return the isHeatingCompressorOn
+     */
+    public boolean isHeatingCompressorOn() {
+        return isHeatingCompressorOn;
+    }
+
+    /**
+     * @return the isHeatingElementOn
+     */
+    public boolean isHeatingElementOn() {
+        return isHeatingElementOn;
+    }
+
+    /**
+     * @return the isCoolingOn
+     */
+    public boolean isCoolingOn() {
+        return isCoolingOn;
+    }
+
+    /**
+     * @return the lastCompressorDisableTime
+     */
+    public long getLastCompressorDisableTime() {
+        return lastCompressorDisableTime;
+    }
+
+    /**
+     * @return the lastCompressorEnableTime
+     */
+    public long getLastCompressorEnableTime() {
+        return lastCompressorEnableTime;
+    }
+
+    /**
+     * @return the lastElementDisableTime
+     */
+    public long getLastElementDisableTime() {
+        return lastElementDisableTime;
+    }
+
+    /**
+     * @return the lastElementEnableTime
+     */
+    public long getLastElementEnableTime() {
+        return lastElementEnableTime;
+    }
+
+    /**
+     * @return the lastFanDisableTime
+     */
+    public long getLastFanDisableTime() {
+        return lastFanDisableTime;
+    }
+
+    /**
+     * @return the lastFanEnableTime
+     */
+    public long getLastFanEnableTime() {
+        return lastFanEnableTime;
+    }
+
+    /**
+     * @return the lastSettingsUpdate
+     */
+    public long getLastSettingsUpdate() {
+        return lastSettingsUpdate;
     }
 
 }

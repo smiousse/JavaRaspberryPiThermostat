@@ -9,6 +9,10 @@ import com.pi4j.io.gpio.RaspiPin;
  */
 public class HvacControllerSetting {
 
+    public enum FanMode {
+        ON, OFF, AUTO
+    }
+
     private Pin pinFan = RaspiPin.GPIO_17;
     private Pin pinCompressor = RaspiPin.GPIO_27;
     private Pin pinCooling = RaspiPin.GPIO_22;
@@ -19,6 +23,8 @@ public class HvacControllerSetting {
     private int compressorRecoveryTime = 60;
     private int compressorStickTime = 60;
     private int fanRecoveryTime = 2;
+
+    private FanMode fanMode = FanMode.AUTO;
 
     /**
      * @return the pinFan
@@ -153,6 +159,21 @@ public class HvacControllerSetting {
      */
     public void setFanRecoveryTime(int fanRecoveryTime) {
         this.fanRecoveryTime = fanRecoveryTime;
+    }
+
+    /**
+     * @return the fanMode
+     */
+    public FanMode getFanMode() {
+        return fanMode;
+    }
+
+    /**
+     * @param fanMode
+     * the fanMode to set
+     */
+    public void setFanMode(FanMode fanMode) {
+        this.fanMode = fanMode;
     }
 
 }
