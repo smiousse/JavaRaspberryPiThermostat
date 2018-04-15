@@ -8,7 +8,7 @@ public class ClimateManager {
         HEAT, COOL, FAN, AUTO
     }
 
-    private ClimateSetting cllimateSetting;
+    private ClimateSetting climateSetting;
 
     private HvacController hvacController;
     private long currentTime = 0;
@@ -16,9 +16,9 @@ public class ClimateManager {
     /**
      * @param temperatureSetting
      */
-    public ClimateManager(ClimateSetting cllimateSetting, HvacControllerSetting hvacControllerSetting) {
+    public ClimateManager(ClimateSetting climateSetting, HvacControllerSetting hvacControllerSetting) {
         super();
-        this.cllimateSetting = cllimateSetting;
+        this.climateSetting = climateSetting;
         this.init(hvacControllerSetting);
     }
 
@@ -44,8 +44,8 @@ public class ClimateManager {
             return;
         }
 
-        if (cllimateSetting.getTemperatureMax() <= cllimateSetting.getTemperatureMin() || (cllimateSetting.getTemperatureMax()
-                - cllimateSetting.getTemperatureMin()) < (cllimateSetting.getTemperatureThreshold() * 2)) {
+        if (climateSetting.getTemperatureMax() <= climateSetting.getTemperatureMin() || (climateSetting.getTemperatureMax()
+                - climateSetting.getTemperatureMin()) < (climateSetting.getTemperatureThreshold() * 2)) {
             // writeVerbose('*** Error: Overlap between set minimum and maximum temperatures.');
             return;
         }
@@ -63,26 +63,26 @@ public class ClimateManager {
         //
         // Checking to see if it's warmer than the high range (ie. if the A/C should turn on)
         // If the A/C is on right now, it should stay on until it goes past the threshold
-        if (hvacController.isCoolingOn() && (cllimateSetting
-                .getTemperatureMax() < (cllimateSetting.getObservedTemperature() + cllimateSetting.getTemperatureThreshold()))) {
+        if (hvacController.isCoolingOn() && (climateSetting
+                .getTemperatureMax() < (climateSetting.getObservedTemperature() + climateSetting.getTemperatureThreshold()))) {
             hotterThanMax = true;
         }
         // //If the A/C is not on right now, it should turn on when it hits the threshold
-        if (!hvacController.isCoolingOn() && (cllimateSetting
-                .getTemperatureMax() < (cllimateSetting.getObservedTemperature() - cllimateSetting.getTemperatureThreshold()))) {
+        if (!hvacController.isCoolingOn() && (climateSetting
+                .getTemperatureMax() < (climateSetting.getObservedTemperature() - climateSetting.getTemperatureThreshold()))) {
             hotterThanMax = true;
         }
 
         // Checking to see if it's colder than the low range (ie. if the heater should turn on)
         // If the heater is on right now, it should stay on until it goes past the threshold
-        if (hvacController.isHeatingCompressorOn() && (cllimateSetting
-                .getTemperatureMin() > (cllimateSetting.getObservedTemperature() - cllimateSetting.getTemperatureThreshold()))) {
+        if (hvacController.isHeatingCompressorOn() && (climateSetting
+                .getTemperatureMin() > (climateSetting.getObservedTemperature() - climateSetting.getTemperatureThreshold()))) {
             coolerThanMin = true;
         }
 
         // If the heater is not on right now, it should turn on when it hits the threshold
-        if (!hvacController.isHeatingCompressorOn() && (cllimateSetting
-                .getTemperatureMin() > (cllimateSetting.getObservedTemperature() + cllimateSetting.getTemperatureThreshold()))) {
+        if (!hvacController.isHeatingCompressorOn() && (climateSetting
+                .getTemperatureMin() > (climateSetting.getObservedTemperature() + climateSetting.getTemperatureThreshold()))) {
             coolerThanMin = true;
         }
 
