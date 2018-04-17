@@ -50,7 +50,7 @@ public class DHT11 {
             Gpio.digitalWrite(pin, Gpio.LOW);
             Gpio.delay(18);
 
-            Gpio.digitalWrite(pin, Gpio.HIGH);
+            Gpio.digitalWrite(pin, Gpio.ALT0);
             Gpio.pinMode(pin, Gpio.INPUT);
 
             for (int i = 0; i < MAXTIMINGS; i++) {
@@ -141,7 +141,7 @@ public class DHT11 {
      * 
      * @return Double - humidity as a double.
      */
-    public double gethumidity() {
+    public double getHumidity() {
         return this.humidity;
     }
 
@@ -152,5 +152,12 @@ public class DHT11 {
      */
     private boolean checkParity() {
         return dht11_dat[4] == (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3] & 0xFF);
+    }
+
+    public static void main(String[] args) {
+        DHT11 sensor = new DHT11(7);
+        sensor.updateTemperature();
+        System.out.println("temperature = " + sensor.getTemperature());
+        System.out.println("humidity = " + sensor.getHumidity());
     }
 }
