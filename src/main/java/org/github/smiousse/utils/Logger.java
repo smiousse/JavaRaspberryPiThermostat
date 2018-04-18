@@ -12,8 +12,8 @@ import java.util.Date;
 public class Logger {
 
     // Log Files
-    private static File log = new File("./src/Logs/Log.txt");
-    private static File errorLog = new File("./src/Logs/ErrorLog.txt");
+    private static File log = new File("./Log.txt");
+    private static File errorLog = new File("./ErrorLog.txt");
     private static double logSize = (double) log.length() / (1024 * 1024); // Size in MB
     private static double errorLogSize = (double) errorLog.length() / (1024 * 1024); // Size in MB
 
