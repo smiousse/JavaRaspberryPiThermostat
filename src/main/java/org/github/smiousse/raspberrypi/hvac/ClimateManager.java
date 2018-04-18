@@ -11,6 +11,7 @@ public class ClimateManager {
     private ClimateSetting climateSetting;
 
     private HvacController hvacController;
+
     private long currentTime = 0;
 
     /**
@@ -32,7 +33,7 @@ public class ClimateManager {
     /**
      * @param climateMode
      */
-    public void checkClimate(ClimateMode climateMode) {
+    public void checkClimate(final ClimateMode climateMode, final double observedTemperature) {
 
         // # This function is called if the compressor is in heat, cool or auto mode.
         // # First check the current temperature, set temperature, and threshold.
@@ -63,26 +64,26 @@ public class ClimateManager {
         //
         // Checking to see if it's warmer than the high range (ie. if the A/C should turn on)
         // If the A/C is on right now, it should stay on until it goes past the threshold
-        if (hvacController.isCoolingOn() && (climateSetting
-                .getTemperatureMax() < (climateSetting.getObservedTemperature() + climateSetting.getTemperatureThreshold()))) {
+        if (hvacController.isCoolingOn()
+                && (climateSetting.getTemperatureMax() < (observedTemperature + climateSetting.getTemperatureThreshold()))) {
             hotterThanMax = true;
         }
         // //If the A/C is not on right now, it should turn on when it hits the threshold
-        if (!hvacController.isCoolingOn() && (climateSetting
-                .getTemperatureMax() < (climateSetting.getObservedTemperature() - climateSetting.getTemperatureThreshold()))) {
+        if (!hvacController.isCoolingOn()
+                && (climateSetting.getTemperatureMax() < (observedTemperature - climateSetting.getTemperatureThreshold()))) {
             hotterThanMax = true;
         }
 
         // Checking to see if it's colder than the low range (ie. if the heater should turn on)
         // If the heater is on right now, it should stay on until it goes past the threshold
-        if (hvacController.isHeatingCompressorOn() && (climateSetting
-                .getTemperatureMin() > (climateSetting.getObservedTemperature() - climateSetting.getTemperatureThreshold()))) {
+        if (hvacController.isHeatingCompressorOn()
+                && (climateSetting.getTemperatureMin() > (observedTemperature - climateSetting.getTemperatureThreshold()))) {
             coolerThanMin = true;
         }
 
         // If the heater is not on right now, it should turn on when it hits the threshold
-        if (!hvacController.isHeatingCompressorOn() && (climateSetting
-                .getTemperatureMin() > (climateSetting.getObservedTemperature() + climateSetting.getTemperatureThreshold()))) {
+        if (!hvacController.isHeatingCompressorOn()
+                && (climateSetting.getTemperatureMin() > (observedTemperature + climateSetting.getTemperatureThreshold()))) {
             coolerThanMin = true;
         }
 

@@ -1,13 +1,51 @@
 package org.github.smiousse.raspberrypi.hvac;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
 
 public class HvacController {
 
     private HvacControllerSetting setting;
+
+    private static Map<Integer, Pin> pinMappings = new HashMap<>();
+
+    static {
+        pinMappings.put(0, RaspiPin.GPIO_00);
+        pinMappings.put(1, RaspiPin.GPIO_01);
+        pinMappings.put(2, RaspiPin.GPIO_02);
+        pinMappings.put(3, RaspiPin.GPIO_03);
+        pinMappings.put(4, RaspiPin.GPIO_04);
+        pinMappings.put(5, RaspiPin.GPIO_05);
+        pinMappings.put(6, RaspiPin.GPIO_06);
+        pinMappings.put(7, RaspiPin.GPIO_07);
+        pinMappings.put(8, RaspiPin.GPIO_08);
+        pinMappings.put(9, RaspiPin.GPIO_09);
+        pinMappings.put(10, RaspiPin.GPIO_10);
+        pinMappings.put(11, RaspiPin.GPIO_11);
+        pinMappings.put(12, RaspiPin.GPIO_12);
+        pinMappings.put(13, RaspiPin.GPIO_13);
+        pinMappings.put(14, RaspiPin.GPIO_14);
+        pinMappings.put(15, RaspiPin.GPIO_15);
+        pinMappings.put(16, RaspiPin.GPIO_16);
+        pinMappings.put(21, RaspiPin.GPIO_21);
+        pinMappings.put(22, RaspiPin.GPIO_22);
+        pinMappings.put(23, RaspiPin.GPIO_23);
+        pinMappings.put(24, RaspiPin.GPIO_24);
+        pinMappings.put(25, RaspiPin.GPIO_25);
+        pinMappings.put(26, RaspiPin.GPIO_26);
+        pinMappings.put(27, RaspiPin.GPIO_27);
+        pinMappings.put(28, RaspiPin.GPIO_28);
+        pinMappings.put(29, RaspiPin.GPIO_29);
+        pinMappings.put(30, RaspiPin.GPIO_30);
+        pinMappings.put(31, RaspiPin.GPIO_31);
+    }
 
     private GpioPinDigitalOutput pinFan;
     private GpioPinDigitalOutput pinHeatingCompessor;
@@ -46,16 +84,18 @@ public class HvacController {
     private void init() {
         gpio = GpioFactory.getInstance();
 
-        pinFan = gpio.provisionDigitalOutputPin(setting.getPinFan(), "Fan", PinState.LOW);
+        pinFan = gpio.provisionDigitalOutputPin(pinMappings.get(setting.getPinFanNumber()), "Fan", PinState.LOW);
         pinFan.setShutdownOptions(true, PinState.LOW);
 
-        pinHeatingCompessor = gpio.provisionDigitalOutputPin(setting.getPinCompressor(), "Heanting compressor", PinState.LOW);
+        pinHeatingCompessor = gpio.provisionDigitalOutputPin(pinMappings.get(setting.getPinCompressorNumber()), "Heanting compressor",
+                PinState.LOW);
         pinHeatingCompessor.setShutdownOptions(true, PinState.LOW);
 
-        pinHeatingElement = gpio.provisionDigitalOutputPin(setting.getPinHeatElement(), "Heating element", PinState.LOW);
+        pinHeatingElement = gpio.provisionDigitalOutputPin(pinMappings.get(setting.getPinHeatElementNumber()), "Heating element",
+                PinState.LOW);
         pinHeatingElement.setShutdownOptions(true, PinState.LOW);
 
-        pinCooling = gpio.provisionDigitalOutputPin(setting.getPinCooling(), "Cooling", PinState.LOW);
+        pinCooling = gpio.provisionDigitalOutputPin(pinMappings.get(setting.getPinCoolingNumber()), "Cooling", PinState.LOW);
         pinCooling.setShutdownOptions(true, PinState.LOW);
 
     }

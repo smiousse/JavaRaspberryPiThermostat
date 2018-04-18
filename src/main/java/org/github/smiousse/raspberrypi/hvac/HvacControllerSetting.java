@@ -1,8 +1,5 @@
 package org.github.smiousse.raspberrypi.hvac;
 
-import com.pi4j.io.gpio.Pin;
-import com.pi4j.io.gpio.RaspiPin;
-
 /**
  * @author smiousse
  *
@@ -13,10 +10,10 @@ public class HvacControllerSetting {
         ON, OFF, AUTO
     }
 
-    private Pin pinFan = RaspiPin.GPIO_17;
-    private Pin pinCompressor = RaspiPin.GPIO_27;
-    private Pin pinCooling = RaspiPin.GPIO_22;
-    private Pin pinHeatElement = RaspiPin.GPIO_22;
+    private int pinFanNumber = 17;
+    private int pinCompressorNumber = 27;
+    private int pinCoolingNumber = 22;
+    private int pinHeatElementNumber = 22;
 
     private int toggleDelay = 1;
     private int inTheBlindTime = 300;
@@ -27,63 +24,63 @@ public class HvacControllerSetting {
     private FanMode fanMode = FanMode.AUTO;
 
     /**
-     * @return the pinFan
+     * @return the pinFanNumber
      */
-    public Pin getPinFan() {
-        return pinFan;
+    public int getPinFanNumber() {
+        return pinFanNumber;
     }
 
     /**
-     * @param pinFan
-     * the pinFan to set
+     * @param pinFanNumber
+     * the pinFanNumber to set
      */
-    public void setPinFan(Pin pinFan) {
-        this.pinFan = pinFan;
+    public void setPinFanNumber(int pinFanNumber) {
+        this.pinFanNumber = pinFanNumber;
     }
 
     /**
-     * @return the pinCompressor
+     * @return the pinCompressorNumber
      */
-    public Pin getPinCompressor() {
-        return pinCompressor;
+    public int getPinCompressorNumber() {
+        return pinCompressorNumber;
     }
 
     /**
-     * @param pinCompressor
-     * the pinCompressor to set
+     * @param pinCompressorNumber
+     * the pinCompressorNumber to set
      */
-    public void setPinCompressor(Pin pinCompressor) {
-        this.pinCompressor = pinCompressor;
+    public void setPinCompressorNumber(int pinCompressorNumber) {
+        this.pinCompressorNumber = pinCompressorNumber;
     }
 
     /**
-     * @return the pinCooling
+     * @return the pinCoolingNumber
      */
-    public Pin getPinCooling() {
-        return pinCooling;
+    public int getPinCoolingNumber() {
+        return pinCoolingNumber;
     }
 
     /**
-     * @param pinCooling
-     * the pinCooling to set
+     * @param pinCoolingNumber
+     * the pinCoolingNumber to set
      */
-    public void setPinCooling(Pin pinCooling) {
-        this.pinCooling = pinCooling;
+    public void setPinCoolingNumber(int pinCoolingNumber) {
+        this.pinCoolingNumber = pinCoolingNumber;
     }
 
     /**
-     * @return the pinHeatElement
+     * @return the pinHeatElementNumber
      */
-    public Pin getPinHeatElement() {
-        return pinHeatElement;
+    public int getPinHeatElementNumber() {
+        return pinHeatElementNumber;
     }
 
     /**
-     * @param pinHeatElement
-     * the pinHeatElement to set
+     * @param pinHeatElementNumber
+     * the pinHeatElementNumber to set
      */
-    public void setPinHeatElement(Pin pinHeatElement) {
-        this.pinHeatElement = pinHeatElement;
+    public void setPinHeatElementNumber(int pinHeatElementNumber) {
+        this.pinHeatElementNumber = pinHeatElementNumber;
     }
 
     /**

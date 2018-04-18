@@ -1,0 +1,26 @@
+{
+  "climateSetting": {
+    "observedTemperature": 20,
+    "temperatureMax": 24.5,
+    "temperatureMin": 19.5,
+    "temperatureThreshold": 0.5
+  },
+  "hvacControllerSetting": {
+    "compressorRecoveryTime": 60,
+    "compressorStickTime": 60,
+    "fanMode": "AUTO",
+    "fanRecoveryTime": 2,
+    "inTheBlindTime": 300,
+    "pinCompressorNumber": 27,
+    "pinCoolingNumber": 22,
+    "pinFanNumber": 17,
+    "pinHeatElementNumber": 22,
+    "toggleDelay": 1
+  },
+  "sensorSettings": [
+    {
+      "gpioPinNumber": 7,
+      "name": "Master"
+    }
+  ]
+}

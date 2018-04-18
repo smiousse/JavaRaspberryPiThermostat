@@ -6,31 +6,15 @@ package org.github.smiousse.raspberrypi.hvac;
  */
 public class ClimateSetting {
 
-    private double observedTemperature;
-    private double temperatureMax;
-    private double temperatureMin;
-    private double temperatureThreshold;
+    private double temperatureMax = 24.5;
+    private double temperatureMin = 19.5;
+    private double temperatureThreshold = 0.5;
 
     /**
      * 
      */
     public ClimateSetting() {
         super();
-    }
-
-    /**
-     * @return the observedTemperature
-     */
-    public double getObservedTemperature() {
-        return observedTemperature;
-    }
-
-    /**
-     * @param observedTemperature
-     * the observedTemperature to set
-     */
-    public void setObservedTemperature(double observedTemperature) {
-        this.observedTemperature = observedTemperature;
     }
 
     /**
