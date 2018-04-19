@@ -154,15 +154,4 @@ public class DHT11 {
         return dht11_dat[4] == (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3] & 0xFF);
     }
 
-    public static void main(String[] args) {
-        DHT11 sensor = new DHT11(7);
-        sensor.updateTemperature();
-        double temperature = sensor.getTemperature();
-        temperature = ((temperature - 32) * 5) / 9;
-
-        System.out.println("Temperatue in Celsius = " + temperature);
-
-        System.out.println("temperature = " + temperature);
-        System.out.println("humidity = " + sensor.getHumidity());
-    }
 }
