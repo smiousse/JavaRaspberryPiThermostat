@@ -24,10 +24,8 @@ public class Bootstrap {
     private static void testDTH11Sensor() {
         DHT11 sensor = new DHT11(7);
         sensor.updateTemperature();
-        double temperature = sensor.getTemperature();
-        temperature = ((temperature - 32) * 5) / 9;
-
-        System.out.println("Temperatue in Celsius = " + temperature);
+        System.out.println("Temperatue in Celsius = " + sensor.getTemperatureInCelsius());
+        System.out.println("Temperatue in Farenheit = " + sensor.getTemperatureInFarenheit());
         System.out.println("humidity = " + sensor.getHumidity());
     }
 

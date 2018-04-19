@@ -13,7 +13,8 @@ public class DHT11 {
     private static final int MAXTIMINGS = 85;
 
     // Temerature Vlaues
-    private double temperature;
+    private double temperatureInCelsius;
+    private double temperatureInFarenheit;
     private double humidity;
 
     // Error handling
@@ -114,26 +115,32 @@ public class DHT11 {
                     c = -c;
                 }
 
+                this.temperatureInCelsius = c;
                 final float f = c * 1.8f + 32;
-                this.temperature = f;
+                this.temperatureInFarenheit = f;
                 this.humidity = h;
             } else {
-                this.temperature = Double.MAX_VALUE;
+                this.temperatureInCelsius = Double.MAX_VALUE;
                 this.humidity = Double.MAX_VALUE;
             }
-        } while (this.temperature == Double.MAX_VALUE || this.humidity == Double.MAX_VALUE);
+        } while (this.temperatureInCelsius == Double.MAX_VALUE || this.humidity == Double.MAX_VALUE);
 
         // Rest error handeling variable.
         this.errorCount = 0;
     }
 
     /**
-     * Returns the temperature from the sensor.
-     * 
-     * @return Double - temperature as a double.
+     * @return the temperatureInCelsius
      */
-    public double getTemperature() {
-        return this.temperature;
+    public double getTemperatureInCelsius() {
+        return temperatureInCelsius;
+    }
+
+    /**
+     * @return the temperatureInFarenheit
+     */
+    public double getTemperatureInFarenheit() {
+        return temperatureInFarenheit;
     }
 
     /**
