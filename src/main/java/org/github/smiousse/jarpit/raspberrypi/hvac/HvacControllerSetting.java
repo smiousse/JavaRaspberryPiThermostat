@@ -1,4 +1,4 @@
-package org.github.smiousse.raspberrypi.hvac;
+package org.github.smiousse.jarpit.raspberrypi.hvac;
 
 /**
  * @author smiousse

@@ -1,6 +1,6 @@
-package org.github.smiousse.raspberrypi.hvac;
+package org.github.smiousse.jarpit.raspberrypi.hvac;
 
-import org.github.smiousse.raspberrypi.hvac.HvacControllerSetting.FanMode;
+import org.github.smiousse.jarpit.raspberrypi.hvac.HvacControllerSetting.FanMode;
 
 public class ClimateManager {
 

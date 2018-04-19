@@ -1,4 +1,4 @@
-package org.github.smiousse.utils;
+package org.github.smiousse.jarpit.utils;
 
 import java.io.BufferedReader;
 import java.io.File;

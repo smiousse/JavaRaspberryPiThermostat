@@ -1,4 +1,4 @@
-package org.github.smiousse.raspberrypi.sensors;
+package org.github.smiousse.jarpit.raspberrypi.sensors;
 
 public class SensorSetting {
 

@@ -1,12 +1,12 @@
-package org.github.smiousse;
+package org.github.smiousse.jarpit;
 
 import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.github.smiousse.raspberrypi.hvac.ClimateSetting;
-import org.github.smiousse.raspberrypi.hvac.HvacControllerSetting;
-import org.github.smiousse.raspberrypi.sensors.SensorSetting;
+import org.github.smiousse.jarpit.raspberrypi.hvac.ClimateSetting;
+import org.github.smiousse.jarpit.raspberrypi.hvac.HvacControllerSetting;
+import org.github.smiousse.jarpit.raspberrypi.sensors.SensorSetting;
 
 public class Settings {
 

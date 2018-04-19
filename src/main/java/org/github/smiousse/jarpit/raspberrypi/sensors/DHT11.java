@@ -1,6 +1,6 @@
-package org.github.smiousse.raspberrypi.sensors;
+package org.github.smiousse.jarpit.raspberrypi.sensors;
 
-import org.github.smiousse.utils.Logger;
+import org.github.smiousse.jarpit.utils.Logger;
 
 import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.GpioUtil;

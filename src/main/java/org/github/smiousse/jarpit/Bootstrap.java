@@ -1,7 +1,7 @@
-package org.github.smiousse;
+package org.github.smiousse.jarpit;
 
-import org.github.smiousse.raspberrypi.hvac.ClimateSetting;
-import org.github.smiousse.raspberrypi.hvac.HvacControllerSetting;
+import org.github.smiousse.jarpit.raspberrypi.hvac.ClimateSetting;
+import org.github.smiousse.jarpit.raspberrypi.hvac.HvacControllerSetting;
 import org.json.JSONObject;
 
 /**
