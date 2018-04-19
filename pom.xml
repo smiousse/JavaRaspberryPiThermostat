@@ -17,8 +17,8 @@
     <dependency>
     <groupId>com.pi4j</groupId>
     <artifactId>pi4j-gpio-extension</artifactId>
-    <version>1.1</version>
-</dependency>
+    <version>1.2-SNAPSHOT</version>
+  </dependency>
 
     <dependency>
       <groupId>org.quartz-scheduler</groupId>

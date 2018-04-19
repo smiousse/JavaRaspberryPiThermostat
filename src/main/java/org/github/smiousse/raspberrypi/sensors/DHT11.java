@@ -157,7 +157,12 @@ public class DHT11 {
     public static void main(String[] args) {
         DHT11 sensor = new DHT11(7);
         sensor.updateTemperature();
-        System.out.println("temperature = " + sensor.getTemperature());
+        double temperature = sensor.getTemperature();
+        temperature = ((temperature - 32) * 5) / 9;
+
+        System.out.println("Temperatue in Celsius = " + temperature);
+
+        System.out.println("temperature = " + temperature);
         System.out.println("humidity = " + sensor.getHumidity());
     }
 }
