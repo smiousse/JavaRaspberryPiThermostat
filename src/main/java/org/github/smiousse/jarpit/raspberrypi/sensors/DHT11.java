@@ -54,7 +54,7 @@ public class DHT11 {
             Gpio.digitalWrite(pin, Gpio.LOW);
             Gpio.delay(18);
 
-            Gpio.digitalWrite(pin, Gpio.ALT0);
+            Gpio.digitalWrite(pin, Gpio.HIGH);
             Gpio.pinMode(pin, Gpio.INPUT);
 
             for (int i = 0; i < MAXTIMINGS; i++) {
@@ -103,7 +103,10 @@ public class DHT11 {
             // check we read 40 bits (8bit x 5 ) + verify checksum in the last byte.
             if (j >= 40 && checkParity()) {
                 double h = (float) ((dht11_dat[0] << 8) + dht11_dat[1]) / 10;
-
+                System.out.println("dht11_dat[0] = " + dht11_dat[0]);
+                System.out.println("dht11_dat[1] = " + dht11_dat[1]);
+                System.out.println("dht11_dat[2] = " + dht11_dat[2]);
+                System.out.println("dht11_dat[3] = " + dht11_dat[3]);
                 if (h > 100) {
                     try {
                         h = new BigDecimal(dht11_dat[0] + "." + dht11_dat[1]).setScale(1, RoundingMode.HALF_EVEN).doubleValue(); // for DHT11
