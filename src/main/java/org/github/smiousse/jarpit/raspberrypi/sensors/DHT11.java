@@ -1,5 +1,8 @@
 package org.github.smiousse.jarpit.raspberrypi.sensors;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import org.github.smiousse.jarpit.utils.Logger;
 
 import com.pi4j.wiringpi.Gpio;
@@ -99,13 +102,18 @@ public class DHT11 {
 
             // check we read 40 bits (8bit x 5 ) + verify checksum in the last byte.
             if (j >= 40 && checkParity()) {
-                float h = (float) ((dht11_dat[0] << 8) + dht11_dat[1]) / 10;
+                double h = (float) ((dht11_dat[0] << 8) + dht11_dat[1]) / 10;
 
                 if (h > 100) {
-                    h = dht11_dat[0]; // for DHT11
+                    try {
+                        h = new BigDecimal(dht11_dat[0] + "." + dht11_dat[1]).setScale(1, RoundingMode.HALF_EVEN).doubleValue(); // for DHT11
+                    }
+                    catch (Exception e) {
+                        h = dht11_dat[0];// for DHT11
+                    }
                 }
 
-                float c = (float) (((dht11_dat[2] & 0x7F) << 8) + dht11_dat[3]) / 10;
+                double c = (float) (((dht11_dat[2] & 0x7F) << 8) + dht11_dat[3]) / 10;
 
                 if (c > 125) {
                     c = dht11_dat[2]; // for DHT11
@@ -115,8 +123,16 @@ public class DHT11 {
                     c = -c;
                 }
 
+                try {
+                    c = new BigDecimal(c + "." + dht11_dat[3]).setScale(1, RoundingMode.HALF_EVEN).doubleValue();
+                }
+                catch (Exception e) {
+
+                }
+
                 this.temperatureInCelsius = c;
-                final float f = c * 1.8f + 32;
+
+                final double f = this.temperatureInCelsius * 1.8f + 32;
                 this.temperatureInFarenheit = f;
                 this.humidity = h;
             } else {
@@ -159,6 +175,10 @@ public class DHT11 {
      */
     private boolean checkParity() {
         return dht11_dat[4] == (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3] & 0xFF);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new BigDecimal("30.1236").setScale(1, RoundingMode.HALF_EVEN).doubleValue());
     }
 
 }
