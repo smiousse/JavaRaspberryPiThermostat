@@ -3,12 +3,15 @@ package org.github.smiousse.jarpit.raspberrypi.sensors;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import org.github.smiousse.jarpit.api.sensors.TempSensor;
 import org.github.smiousse.jarpit.utils.Logger;
 
 import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.GpioUtil;
 
-public class DHT11 {
+public class DHT11 implements TempSensor {
+
+    private String info;
 
     // GPIO Stuff
     private final int[] dht11_dat = { 0, 0, 0, 0, 0 };
@@ -27,8 +30,9 @@ public class DHT11 {
     /**
      * Creates a DHT11 object.
      */
-    public DHT11(int pin) {
+    public DHT11(int pin, String info) {
         this.pin = pin;
+        this.info = info;
         if (Gpio.wiringPiSetup() == -1) {
             this.log.alert("[ERROR] GPIO setup failed.", "An error occured when creating a DHT11 object");
             this.log.add("[ERROR]", "GPIO setup failed.");
@@ -44,7 +48,7 @@ public class DHT11 {
      * @param int
      * - GPIO pin sensor is connected to.
      */
-    public void updateTemperature() {
+    public boolean updateTemperature() {
         do {
             int laststate = Gpio.HIGH;
             int j = 0;
@@ -146,6 +150,8 @@ public class DHT11 {
 
         // Rest error handeling variable.
         this.errorCount = 0;
+
+        return true;
     }
 
     /**
@@ -182,6 +188,37 @@ public class DHT11 {
 
     public static void main(String[] args) {
         System.out.println(new BigDecimal("30.1236").setScale(1, RoundingMode.HALF_EVEN).doubleValue());
+    }
+
+    /*
+     * (non-Jsdoc)
+     * 
+     * @see org.github.smiousse.jarpit.api.sensors.TemperatureSensor#getTemperature()
+     */
+    @Override
+    public BigDecimal getTemperature() {
+        return BigDecimal.valueOf(temperatureInCelsius);
+    }
+
+    /*
+     * (non-Jsdoc)
+     * 
+     * @see org.github.smiousse.jarpit.api.sensors.TemperatureSensor#getInfo()
+     */
+    @Override
+    public String getInfo() {
+        // TSLT Auto-generated method stub
+        return info;
+    }
+
+    /*
+     * (non-Jsdoc)
+     * 
+     * @see org.github.smiousse.jarpit.api.sensors.TemperatureSensor#getModel()
+     */
+    @Override
+    public TempSensorModel getModel() {
+        return TempSensorModel.DHT11;
     }
 
 }

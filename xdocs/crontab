@@ -1,0 +1,10 @@
+*/10 * * * * sh /disk1/app/DexeroFD/data/geokettle/schedule/export_entreprise.sh
+*/7 * * * * sh /disk1/app/DexeroFD/data/geokettle/schedule/export_accounts.sh
+*/13 * * * * sh /disk1/app/DexeroFD/data/geokettle/schedule/export_entreprise_partial.sh
+0 19 * * * sh /disk1/app/DexeroFD/data/geokettle/schedule/import_daily_stuff.sh
+0 5 * * * sh /disk1/app/DexeroFD/data/geokettle/schedule/import_daily_code_portail.sh
+*/9 * * * * sh /disk1/app/DexeroFD/data/geokettle/schedule/import_frequently_stuff.sh
+0 23 * * * sh /disk1/app/DexeroFD/data/geokettle/schedule/rotate_logs.sh
+15 1 * * 3 sh /disk1/app/DexeroFD/data/geokettle/schedule/weekly_sent_for.sh
+1 0 1 * * sh /disk1/app/DexeroFD/data/geokettle/schedule/monthly_sent_for_batch_1.sh
+0 2 1 * * sh /disk1/app/DexeroFD/data/geokettle/schedule/monthly_sent_for_batch_2.sh
