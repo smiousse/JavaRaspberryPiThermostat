@@ -1,8 +1,6 @@
 package org.github.smiousse.jarpit;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.github.smiousse.jarpit.model.ClimateSetting;
 import org.github.smiousse.jarpit.model.HvacControllerSetting;
@@ -38,7 +36,7 @@ public class Bootstrap {
 
         System.out.println("Temperatue in Celsius = " + sensor.getTemperature());
 
-        StatsLogger statsLogger = new StatsLogger(new File("./stats_" + sdf.format(new Date()) + ".csv"));
+        StatsLogger statsLogger = new StatsLogger("http://192.168.2.22:8080/rest/stats/add/");
 
         statsLogger.log(StatsType.TEMPERATURE, sensor.getTemperature(), "Salle des machines");
         statsLogger.dispose();
