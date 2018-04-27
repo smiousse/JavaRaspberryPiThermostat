@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.github.smiousse.jarpit.api.sensors.TempSensor;
+import org.github.smiousse.jarpit.model.SensorSetting.TempSensorModel;
 
 import com.pi4j.component.temperature.TemperatureSensor;
 import com.pi4j.component.temperature.impl.TmpDS18B20DeviceType;
@@ -70,7 +71,7 @@ public class DS18B20 implements TempSensor {
      * @see org.github.smiousse.jarpit.api.sensors.TemperatureSensor#getModel()
      */
     @Override
-    public TempSensorModel getModel() {
+    public TempSensorModel getTempSensorModel() {
         return TempSensorModel.DS18B20_WP;
     }
 
@@ -80,7 +81,7 @@ public class DS18B20 implements TempSensor {
      * @see org.github.smiousse.jarpit.api.sensors.TemperatureSensor#updateTemperature()
      */
     @Override
-    public boolean updateTemperature() {
+    public boolean updateReadings() {
 
         return true;
     }

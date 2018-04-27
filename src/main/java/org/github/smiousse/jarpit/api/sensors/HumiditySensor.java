@@ -2,14 +2,14 @@ package org.github.smiousse.jarpit.api.sensors;
 
 import java.math.BigDecimal;
 
-import org.github.smiousse.jarpit.model.SensorSetting.TempSensorModel;
+import org.github.smiousse.jarpit.model.SensorSetting.HumiditySensorModel;
 
-public interface TempSensor {
+public interface HumiditySensor {
 
     /**
      * @return
      */
-    public BigDecimal getTemperature();
+    public BigDecimal getHumidity();
 
     /**
      * @return
@@ -19,7 +19,7 @@ public interface TempSensor {
     /**
      * @return
      */
-    public TempSensorModel getTempSensorModel();
+    public HumiditySensorModel getHumiditySensorModel();
 
     /**
      * @return

@@ -3,13 +3,16 @@ package org.github.smiousse.jarpit.raspberrypi.sensors;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import org.github.smiousse.jarpit.api.sensors.HumiditySensor;
 import org.github.smiousse.jarpit.api.sensors.TempSensor;
+import org.github.smiousse.jarpit.model.SensorSetting.HumiditySensorModel;
+import org.github.smiousse.jarpit.model.SensorSetting.TempSensorModel;
 import org.github.smiousse.jarpit.utils.Logger;
 
 import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.GpioUtil;
 
-public class DHT11 implements TempSensor {
+public class DHT11 implements TempSensor, HumiditySensor {
 
     private String info;
 
@@ -48,7 +51,7 @@ public class DHT11 implements TempSensor {
      * @param int
      * - GPIO pin sensor is connected to.
      */
-    public boolean updateTemperature() {
+    public boolean updateReadings() {
         do {
             int laststate = Gpio.HIGH;
             int j = 0;
@@ -100,7 +103,7 @@ public class DHT11 implements TempSensor {
                     if (this.errorCount > 3)
                         break;
 
-                    this.updateTemperature();
+                    this.updateReadings();
                 }
             }
 
@@ -173,8 +176,8 @@ public class DHT11 implements TempSensor {
      * 
      * @return Double - humidity as a double.
      */
-    public double getHumidity() {
-        return this.humidity;
+    public BigDecimal getHumidity() {
+        return BigDecimal.valueOf(this.humidity);
     }
 
     /**
@@ -217,8 +220,18 @@ public class DHT11 implements TempSensor {
      * @see org.github.smiousse.jarpit.api.sensors.TemperatureSensor#getModel()
      */
     @Override
-    public TempSensorModel getModel() {
+    public TempSensorModel getTempSensorModel() {
         return TempSensorModel.DHT11;
+    }
+
+    /*
+     * (non-Jsdoc)
+     * 
+     * @see org.github.smiousse.jarpit.api.sensors.HumiditySensor#getHumiditySensorModel()
+     */
+    @Override
+    public HumiditySensorModel getHumiditySensorModel() {
+        return HumiditySensorModel.DHT11;
     }
 
 }

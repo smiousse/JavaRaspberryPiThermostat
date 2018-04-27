@@ -1,12 +1,8 @@
-package org.github.smiousse.jarpit;
+package org.github.smiousse.jarpit.model;
 
 import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.github.smiousse.jarpit.raspberrypi.hvac.ClimateSetting;
-import org.github.smiousse.jarpit.raspberrypi.hvac.HvacControllerSetting;
-import org.github.smiousse.jarpit.raspberrypi.sensors.SensorSetting;
 
 public class Settings {
 
@@ -65,12 +61,12 @@ public class Settings {
      * @param pinNumber
      */
     @Transient
-    public void addSensor(String name, int pinNumber) {
+    public void addSensor(String name, String deviceId) {
         if (this.sensorSettings == null) {
             this.sensorSettings = new ArrayList<SensorSetting>();
         }
 
-        this.sensorSettings.add(new SensorSetting(name, pinNumber));
+        this.sensorSettings.add(new SensorSetting(name, deviceId));
 
     }
 

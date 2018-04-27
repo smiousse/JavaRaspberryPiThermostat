@@ -3,6 +3,8 @@ package org.github.smiousse.jarpit.raspberrypi.hvac;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.github.smiousse.jarpit.model.HvacControllerSetting;
+
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
