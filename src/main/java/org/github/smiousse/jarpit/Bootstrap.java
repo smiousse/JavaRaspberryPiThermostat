@@ -47,6 +47,12 @@ public class Bootstrap {
         System.out.println("Temperatue in Celsius = " + outSideSensor.getTemperature());
         statsLogger.log(StatsType.TEMPERATURE, outSideSensor.getTemperature(), "Outside");
 
+        // DHT11 sensorHumidity = new DHT11(25, "Outside");
+        // sensorHumidity.updateReadings();
+        //
+        // System.out.println("Humidity = " + sensorHumidity.getHumidity());
+        // statsLogger.log(StatsType.HUMIDITY, sensorHumidity.getHumidity(), "Outside");
+
         statsLogger.dispose();
     }
 

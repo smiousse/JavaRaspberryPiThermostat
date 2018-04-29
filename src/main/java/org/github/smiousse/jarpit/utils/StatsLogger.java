@@ -166,4 +166,10 @@ public class StatsLogger {
         }
     }
 
+    public static void main(String[] args) {
+        StatsLogger statsLogger = new StatsLogger("http://192.168.2.20:8080/rest/stats/add/");
+
+        statsLogger.log(StatsType.TEMPERATURE, 21.9, "Bureau");
+    }
+
 }
