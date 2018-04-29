@@ -1,14 +1,16 @@
 package org.github.smiousse.jarpit;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.github.smiousse.jarpit.model.ClimateSetting;
 import org.github.smiousse.jarpit.model.HvacControllerSetting;
 import org.github.smiousse.jarpit.model.Settings;
 import org.github.smiousse.jarpit.raspberrypi.sensors.DHT11;
 import org.github.smiousse.jarpit.raspberrypi.sensors.DS18B20;
-import org.github.smiousse.jarpit.utils.StatsLogger;
 import org.github.smiousse.jarpit.utils.StatsLogger.StatsType;
+import org.github.smiousse.jarpit.utils.StatscsvLogger;
 
 /**
  * @author smiousse
@@ -36,9 +38,15 @@ public class Bootstrap {
 
         System.out.println("Temperatue in Celsius = " + sensor.getTemperature());
 
-        StatsLogger statsLogger = new StatsLogger("http://192.168.2.22:8080/rest/stats/add/");
+        StatscsvLogger statsLogger = new StatscsvLogger(new File("./stats_" + sdf.format(new Date()) + ".csv"));
 
         statsLogger.log(StatsType.TEMPERATURE, sensor.getTemperature(), "Salle des machines");
+
+        DS18B20 outSideSensor = new DS18B20("Outside", "28-0117c13a71ff");
+
+        System.out.println("Temperatue in Celsius = " + outSideSensor.getTemperature());
+        statsLogger.log(StatsType.TEMPERATURE, outSideSensor.getTemperature(), "Outside");
+
         statsLogger.dispose();
     }
 
