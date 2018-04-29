@@ -1,16 +1,17 @@
 package org.github.smiousse.jarpit;
 
-import java.io.File;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.github.smiousse.jarpit.model.ClimateSetting;
 import org.github.smiousse.jarpit.model.HvacControllerSetting;
 import org.github.smiousse.jarpit.model.Settings;
 import org.github.smiousse.jarpit.raspberrypi.sensors.DHT11;
 import org.github.smiousse.jarpit.raspberrypi.sensors.DS18B20;
+import org.github.smiousse.jarpit.utils.StatsLogger;
 import org.github.smiousse.jarpit.utils.StatsLogger.StatsType;
-import org.github.smiousse.jarpit.utils.StatscsvLogger;
+
+import com.pi4j.io.gpio.RaspiPin;
 
 /**
  * @author smiousse
@@ -34,24 +35,32 @@ public class Bootstrap {
     }
 
     private static void logTemprature() {
+
+        StatsLogger statsLogger = new StatsLogger("http://192.168.2.22:8080/rest/stats/add/");
+
         DS18B20 sensor = new DS18B20("Master", "28-0117b12203ff");
 
-        System.out.println("Temperatue in Celsius = " + sensor.getTemperature());
+        BigDecimal temperatureInside = sensor.getTemperature();
 
-        StatscsvLogger statsLogger = new StatscsvLogger(new File("./stats_" + sdf.format(new Date()) + ".csv"));
-
-        statsLogger.log(StatsType.TEMPERATURE, sensor.getTemperature(), "Salle des machines");
+        System.out.println("Temperatue in Celsius = " + temperatureInside);
+        statsLogger.log(StatsType.TEMPERATURE, temperatureInside, "Salle des machines");
 
         DS18B20 outSideSensor = new DS18B20("Outside", "28-0117c13a71ff");
 
-        System.out.println("Temperatue in Celsius = " + outSideSensor.getTemperature());
-        statsLogger.log(StatsType.TEMPERATURE, outSideSensor.getTemperature(), "Outside");
+        BigDecimal temperatureOutside = outSideSensor.getTemperature();
 
-        // DHT11 sensorHumidity = new DHT11(25, "Outside");
-        // sensorHumidity.updateReadings();
-        //
-        // System.out.println("Humidity = " + sensorHumidity.getHumidity());
-        // statsLogger.log(StatsType.HUMIDITY, sensorHumidity.getHumidity(), "Outside");
+        System.out.println("Temperatue in Celsius = " + temperatureOutside);
+        statsLogger.log(StatsType.TEMPERATURE, temperatureOutside, "Outside");
+
+        DHT11 sensorHumidity = new DHT11(RaspiPin.GPIO_25.getAddress(), "Outside");
+        sensorHumidity.updateReadings();
+
+        BigDecimal humidity = sensorHumidity.getHumidity();
+
+        System.out.println("Humidity = " + humidity);
+        statsLogger.log(StatsType.HUMIDITY, humidity, "Outside");
+
+        // RaspiPin.GPIO_25.getAddress()
 
         statsLogger.dispose();
     }

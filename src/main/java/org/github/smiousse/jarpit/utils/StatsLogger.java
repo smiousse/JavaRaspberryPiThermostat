@@ -1,5 +1,6 @@
 package org.github.smiousse.jarpit.utils;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +25,6 @@ public class StatsLogger {
         TEMPERATURE, HUMIDITY, FAN, HEAT_COMPRESSOR, HEAT_ELEMENT, COOL_COMPRESSOR
     };
 
-    private CloseableHttpClient httpClient;
     private String baseUrl;
     private int count = 0;
 
@@ -35,18 +35,18 @@ public class StatsLogger {
      */
     public StatsLogger(String baseUrl) {
         this.baseUrl = baseUrl;
-        this.init();
+
     }
 
     /**
      * 
      */
-    protected void init() {
-        if (httpClient == null) {
-            HttpClientBuilder builder = HttpClientBuilder.create();
-            this.initHttpConfig(builder);
-            httpClient = builder.build();
-        }
+    protected CloseableHttpClient getHttpClient() {
+
+        HttpClientBuilder builder = HttpClientBuilder.create();
+        this.initHttpConfig(builder);
+        return builder.build();
+
     }
 
     /**
@@ -100,7 +100,7 @@ public class StatsLogger {
                 this.doPost(this.baseUrl + statsType.toString(), postParams, null);
             }
             catch (Exception e) {
-                // TSLT: handle exception
+                e.printStackTrace();
             }
         }
     }
@@ -114,28 +114,43 @@ public class StatsLogger {
      */
     protected CloseableHttpResponse doPost(String serverUrl, Map<String, String> postParams, Map<String, String> queryParams)
             throws Exception {
-        // Build the server URI together with the parameters you wish to pass
-        URIBuilder uriBuilder = new URIBuilder(serverUrl);
-        addQueryParams(queryParams, uriBuilder);
 
-        HttpPost post = new HttpPost(uriBuilder.build());
-        post.addHeader("Accept", "application/json");
+        CloseableHttpClient httpClient = null;
+        try {
+            // Build the server URI together with the parameters you wish to pass
+            URIBuilder uriBuilder = new URIBuilder(serverUrl);
+            addQueryParams(queryParams, uriBuilder);
 
-        if (postParams != null && postParams.size() > 0) {
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            for (String paramName : postParams.keySet()) {
-                if (postParams.get(paramName) != null && !postParams.get(paramName).isEmpty()) {
-                    params.add(new BasicNameValuePair(paramName, postParams.get(paramName)));
+            HttpPost post = new HttpPost(uriBuilder.build());
+            post.addHeader("Accept", "application/json");
+
+            if (postParams != null && postParams.size() > 0) {
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                for (String paramName : postParams.keySet()) {
+                    if (postParams.get(paramName) != null && !postParams.get(paramName).isEmpty()) {
+                        params.add(new BasicNameValuePair(paramName, postParams.get(paramName)));
+                    }
+                }
+                post.setEntity(new UrlEncodedFormEntity(params));
+            }
+
+            httpClient = getHttpClient();
+
+            CloseableHttpResponse response = httpClient.execute(post);
+
+            // System.out.println("response.getStatusLine().getStatusCode() = " + response.getStatusLine().getStatusCode());
+
+            return response;
+        } finally {
+            if (httpClient != null) {
+                try {
+                    httpClient.close();
+                }
+                catch (Exception e) {
+                    // TSLT: handle exception
                 }
             }
-            post.setEntity(new UrlEncodedFormEntity(params));
         }
-
-        CloseableHttpResponse response = httpClient.execute(post);
-
-        // System.out.println("response.getStatusLine().getStatusCode() = " + response.getStatusLine().getStatusCode());
-
-        return response;
     }
 
     /**
@@ -156,20 +171,14 @@ public class StatsLogger {
      * 
      */
     public void dispose() {
-        if (httpClient != null) {
-            try {
-                httpClient.close();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public static void main(String[] args) {
-        StatsLogger statsLogger = new StatsLogger("http://192.168.2.20:8080/rest/stats/add/");
+        StatsLogger statsLogger = new StatsLogger("http://192.168.2.22:8080/rest/stats/add/");
 
-        statsLogger.log(StatsType.TEMPERATURE, 21.9, "Bureau");
+        // statsLogger.log(StatsType.TEMPERATURE, 21.9, "Bureau");
+
+        statsLogger.log(StatsType.HUMIDITY, new BigDecimal("81.0"), "Outside");
     }
 
 }
