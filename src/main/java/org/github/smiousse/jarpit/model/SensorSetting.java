@@ -37,6 +37,7 @@ public class SensorSetting {
         super();
         this.name = name;
         this.deviceId = deviceId;
+        this.identifier = deviceId;
     }
 
     /**

@@ -89,12 +89,13 @@ public class StatsLogger {
      * @param extras
      * @param date
      */
-    public void log(StatsType statsType, Object value, String info, String extras, Date date) {
+    public void log(StatsType statsType, Object value, String deviceId, String extras, Date date) {
         if (statsType != null && value != null) {
             Map<String, String> postParams = new HashMap<>();
             postParams.put("value", value.toString());
-            postParams.put("info", info);
+            postParams.put("deviceId", deviceId);
             postParams.put("extras", extras);
+            postParams.put("date", sdf.format(date));
 
             try {
                 this.doPost(this.baseUrl + statsType.toString(), postParams, null);

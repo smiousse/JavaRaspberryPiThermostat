@@ -43,22 +43,22 @@ public class Bootstrap {
         BigDecimal temperatureInside = sensor.getTemperature();
 
         System.out.println("Temperatue in Celsius = " + temperatureInside);
-        statsLogger.log(StatsType.TEMPERATURE, temperatureInside, "Salle des machines");
+        statsLogger.log(StatsType.TEMPERATURE, temperatureInside, "28-0117b12203ff");
 
         DS18B20 outSideSensor = new DS18B20("Outside", "28-0117c13a71ff");
 
         BigDecimal temperatureOutside = outSideSensor.getTemperature();
 
         System.out.println("Temperatue in Celsius = " + temperatureOutside);
-        statsLogger.log(StatsType.TEMPERATURE, temperatureOutside, "Outside");
+        statsLogger.log(StatsType.TEMPERATURE, temperatureOutside, "28-0117c13a71ff");
 
-        DHT11 sensorHumidity = new DHT11(RaspiPin.GPIO_25.getAddress(), "Outside");
+        DHT11 sensorHumidity = new DHT11(RaspiPin.GPIO_25.getAddress(), "sensorHumidityOutside");
         sensorHumidity.updateReadings();
 
         BigDecimal humidity = sensorHumidity.getHumidity();
 
         System.out.println("Humidity = " + humidity);
-        statsLogger.log(StatsType.HUMIDITY, humidity, "Outside");
+        statsLogger.log(StatsType.HUMIDITY, humidity, "sensorHumidityOutside");
 
         // RaspiPin.GPIO_25.getAddress()
 
