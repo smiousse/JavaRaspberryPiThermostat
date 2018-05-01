@@ -4,7 +4,11 @@ import java.math.BigDecimal;
 
 import org.github.smiousse.jarpit.model.SensorSetting.HumiditySensorModel;
 
-public interface HumiditySensor {
+/**
+ * @author smiousse
+ *
+ */
+public interface HumiditySensor extends Sensor {
 
     /**
      * @return
@@ -14,15 +18,6 @@ public interface HumiditySensor {
     /**
      * @return
      */
-    public String getInfo();
-
-    /**
-     * @return
-     */
     public HumiditySensorModel getHumiditySensorModel();
 
-    /**
-     * @return
-     */
-    public boolean updateReadings();
 }

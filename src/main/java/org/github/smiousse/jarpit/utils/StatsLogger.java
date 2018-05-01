@@ -1,6 +1,5 @@
 package org.github.smiousse.jarpit.utils;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +17,7 @@ import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.github.smiousse.jarpit.model.SensorSetting;
 
 public class StatsLogger {
 
@@ -26,7 +26,6 @@ public class StatsLogger {
     };
 
     private String baseUrl;
-    private int count = 0;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -68,8 +67,8 @@ public class StatsLogger {
      * @param value
      * @param info
      */
-    public void log(StatsType statsType, Object value, String info) {
-        this.log(statsType, value, info, null, new Date(System.currentTimeMillis()));
+    public void log(StatsType statsType, Object value, SensorSetting sensorSetting) {
+        this.log(statsType, value, sensorSetting, null, new Date(System.currentTimeMillis()));
     }
 
     /**
@@ -78,8 +77,8 @@ public class StatsLogger {
      * @param info
      * @param extras
      */
-    public void log(StatsType statsType, Object value, String info, String extras) {
-        this.log(statsType, value, extras, null, new Date(System.currentTimeMillis()));
+    public void log(StatsType statsType, Object value, SensorSetting sensorSetting, String extras) {
+        this.log(statsType, value, sensorSetting, null, new Date(System.currentTimeMillis()));
     }
 
     /**
@@ -89,11 +88,14 @@ public class StatsLogger {
      * @param extras
      * @param date
      */
-    public void log(StatsType statsType, Object value, String deviceId, String extras, Date date) {
+    public void log(StatsType statsType, Object value, SensorSetting sensorSetting, String extras, Date date) {
         if (statsType != null && value != null) {
+
+            System.out.println("[" + statsType.toString() + " ] " + sensorSetting.getName() + " = " + value);
+
             Map<String, String> postParams = new HashMap<>();
             postParams.put("value", value.toString());
-            postParams.put("deviceId", deviceId);
+            postParams.put("deviceIdentifier", sensorSetting.getIdentifier());
             postParams.put("extras", extras);
             postParams.put("date", sdf.format(date));
 
@@ -179,7 +181,7 @@ public class StatsLogger {
 
         // statsLogger.log(StatsType.TEMPERATURE, 21.9, "Bureau");
 
-        statsLogger.log(StatsType.HUMIDITY, new BigDecimal("81.0"), "Outside");
+        // statsLogger.log(StatsType.HUMIDITY, new BigDecimal("81.0"), "Outside");
     }
 
 }

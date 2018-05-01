@@ -4,7 +4,11 @@ import java.math.BigDecimal;
 
 import org.github.smiousse.jarpit.model.SensorSetting.TempSensorModel;
 
-public interface TempSensor {
+/**
+ * @author smiousse
+ *
+ */
+public interface TempSensor extends Sensor {
 
     /**
      * @return
@@ -14,15 +18,6 @@ public interface TempSensor {
     /**
      * @return
      */
-    public String getInfo();
-
-    /**
-     * @return
-     */
     public TempSensorModel getTempSensorModel();
 
-    /**
-     * @return
-     */
-    public boolean updateReadings();
 }

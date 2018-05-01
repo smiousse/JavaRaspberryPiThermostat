@@ -21,6 +21,7 @@ public class SensorSetting {
     private String deviceId;
     private String identifier;
     private String name;
+    private int gpioPin;
 
     /**
      * 
@@ -30,14 +31,35 @@ public class SensorSetting {
     }
 
     /**
+     * @param sensorType
+     * @param tempSensorModel
+     * @param deviceId
+     * @param identifier
      * @param name
-     * @param gpioPinNumber
      */
-    public SensorSetting(String name, String deviceId) {
+    public SensorSetting(SensorType sensorType, TempSensorModel tempSensorModel, String deviceId, String identifier, String name) {
         super();
-        this.name = name;
+        this.sensorType = sensorType;
+        this.tempSensorModel = tempSensorModel;
         this.deviceId = deviceId;
-        this.identifier = deviceId;
+        this.identifier = identifier;
+        this.name = name;
+    }
+
+    /**
+     * @param sensorType
+     * @param humiditySensorModel
+     * @param identifier
+     * @param name
+     * @param gpioPin
+     */
+    public SensorSetting(SensorType sensorType, HumiditySensorModel humiditySensorModel, String identifier, String name, int gpioPin) {
+        super();
+        this.sensorType = sensorType;
+        this.humiditySensorModel = humiditySensorModel;
+        this.identifier = identifier;
+        this.name = name;
+        this.gpioPin = gpioPin;
     }
 
     /**
@@ -128,6 +150,21 @@ public class SensorSetting {
      */
     public void setHumiditySensorModel(HumiditySensorModel humiditySensorModel) {
         this.humiditySensorModel = humiditySensorModel;
+    }
+
+    /**
+     * @return the gpioPin
+     */
+    public int getGpioPin() {
+        return gpioPin;
+    }
+
+    /**
+     * @param gpioPin
+     * the gpioPin to set
+     */
+    public void setGpioPin(int gpioPin) {
+        this.gpioPin = gpioPin;
     }
 
 }

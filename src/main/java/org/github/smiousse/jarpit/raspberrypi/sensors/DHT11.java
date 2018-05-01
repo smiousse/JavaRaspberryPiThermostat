@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 
 import org.github.smiousse.jarpit.api.sensors.HumiditySensor;
 import org.github.smiousse.jarpit.api.sensors.TempSensor;
+import org.github.smiousse.jarpit.model.SensorSetting;
 import org.github.smiousse.jarpit.model.SensorSetting.HumiditySensorModel;
 import org.github.smiousse.jarpit.model.SensorSetting.TempSensorModel;
 import org.github.smiousse.jarpit.utils.Logger;
@@ -12,9 +13,7 @@ import org.github.smiousse.jarpit.utils.Logger;
 import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.GpioUtil;
 
-public class DHT11 implements TempSensor, HumiditySensor {
-
-    private String info;
+public class DHT11 extends AbstractSensor implements TempSensor, HumiditySensor {
 
     // GPIO Stuff
     private final int[] dht11_dat = { 0, 0, 0, 0, 0 };
@@ -33,9 +32,9 @@ public class DHT11 implements TempSensor, HumiditySensor {
     /**
      * Creates a DHT11 object.
      */
-    public DHT11(int pin, String info) {
-        this.pin = pin;
-        this.info = info;
+    public DHT11(SensorSetting sensorSetting) {
+        super(sensorSetting);
+        this.pin = sensorSetting.getGpioPin();
         if (Gpio.wiringPiSetup() == -1) {
             this.log.alert("[ERROR] GPIO setup failed.", "An error occured when creating a DHT11 object");
             this.log.add("[ERROR]", "GPIO setup failed.");
@@ -189,10 +188,6 @@ public class DHT11 implements TempSensor, HumiditySensor {
         return dht11_dat[4] == (dht11_dat[0] + dht11_dat[1] + dht11_dat[2] + dht11_dat[3] & 0xFF);
     }
 
-    public static void main(String[] args) {
-        System.out.println(new BigDecimal("30.1236").setScale(1, RoundingMode.HALF_EVEN).doubleValue());
-    }
-
     /*
      * (non-Jsdoc)
      * 
@@ -201,17 +196,6 @@ public class DHT11 implements TempSensor, HumiditySensor {
     @Override
     public BigDecimal getTemperature() {
         return BigDecimal.valueOf(temperatureInCelsius);
-    }
-
-    /*
-     * (non-Jsdoc)
-     * 
-     * @see org.github.smiousse.jarpit.api.sensors.TemperatureSensor#getInfo()
-     */
-    @Override
-    public String getInfo() {
-        // TSLT Auto-generated method stub
-        return info;
     }
 
     /*

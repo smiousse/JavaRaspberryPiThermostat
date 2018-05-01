@@ -1,6 +1,5 @@
 {
   "climateSetting": {
-    "observedTemperature": 20,
     "temperatureMax": 24.5,
     "temperatureMin": 19.5,
     "temperatureThreshold": 0.5
@@ -19,8 +18,31 @@
   },
   "sensorSettings": [
     {
-      "gpioPinNumber": 7,
-      "name": "Master"
+      "deviceId": "28-0117c13a71ff",
+      "gpioPin": 0,
+      "humiditySensorModel": null,
+      "identifier": "outside_temp_sensor_1",
+      "name": "Outside temperature sensor 1",
+      "sensorType": "TEMPERATURE",
+      "tempSensorModel": "DS18B20_WP"
+    },
+    {
+      "deviceId": null,
+      "gpioPin": 25,
+      "humiditySensorModel": "DHT11",
+      "identifier": "outside_temp_sensor_1",
+      "name": "Outside temperature sensor 1",
+      "sensorType": "HUMIDITY",
+      "tempSensorModel": null
+    },
+    {
+      "deviceId": "28-0117c13a71ff",
+      "gpioPin": 0,
+      "humiditySensorModel": null,
+      "identifier": "outside_temp_sensor_1",
+      "name": "Outside temperature sensor 1",
+      "sensorType": "TEMPERATURE",
+      "tempSensorModel": "DS18B20_WP"
     }
   ]
 }

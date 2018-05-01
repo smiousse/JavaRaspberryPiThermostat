@@ -57,16 +57,15 @@ public class Settings {
     }
 
     /**
-     * @param name
-     * @param pinNumber
+     * @param sensorSetting
      */
     @Transient
-    public void addSensor(String name, String deviceId) {
+    public void addSensor(SensorSetting sensorSetting) {
         if (this.sensorSettings == null) {
             this.sensorSettings = new ArrayList<SensorSetting>();
         }
 
-        this.sensorSettings.add(new SensorSetting(name, deviceId));
+        this.sensorSettings.add(sensorSetting);
 
     }
 
