@@ -1,10 +1,14 @@
 package org.github.smiousse.jarpit.model;
 
+import org.github.smiousse.jarpit.raspberrypi.hvac.ClimateManager.ClimateMode;
+
 /**
  * @author smiousse
  *
  */
 public class ClimateSetting {
+
+    private ClimateMode climateMode;
 
     private double temperatureMax = 24.5;
     private double temperatureMin = 19.5;
@@ -60,6 +64,21 @@ public class ClimateSetting {
      */
     public void setTemperatureThreshold(double temperatureThreshold) {
         this.temperatureThreshold = temperatureThreshold;
+    }
+
+    /**
+     * @return the climateMode
+     */
+    public ClimateMode getClimateMode() {
+        return climateMode;
+    }
+
+    /**
+     * @param climateMode
+     * the climateMode to set
+     */
+    public void setClimateMode(ClimateMode climateMode) {
+        this.climateMode = climateMode;
     }
 
 }

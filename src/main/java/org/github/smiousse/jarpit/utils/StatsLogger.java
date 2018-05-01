@@ -22,7 +22,7 @@ import org.github.smiousse.jarpit.model.SensorSetting;
 public class StatsLogger {
 
     public enum StatsType {
-        TEMPERATURE, HUMIDITY, FAN, HEAT_COMPRESSOR, HEAT_ELEMENT, COOL_COMPRESSOR
+        TEMPERATURE, HUMIDITY, FAN, HEATING, COOLING
     };
 
     private String baseUrl;
@@ -65,10 +65,19 @@ public class StatsLogger {
     /**
      * @param statsType
      * @param value
+     * @param deviceIdentifier
+     */
+    public void log(StatsType statsType, Object value, String deviceIdentifier) {
+        this.log(statsType, value, deviceIdentifier, null, new Date(System.currentTimeMillis()));
+    }
+
+    /**
+     * @param statsType
+     * @param value
      * @param info
      */
     public void log(StatsType statsType, Object value, SensorSetting sensorSetting) {
-        this.log(statsType, value, sensorSetting, null, new Date(System.currentTimeMillis()));
+        this.log(statsType, value, sensorSetting.getIdentifier(), null, new Date(System.currentTimeMillis()));
     }
 
     /**
@@ -78,7 +87,7 @@ public class StatsLogger {
      * @param extras
      */
     public void log(StatsType statsType, Object value, SensorSetting sensorSetting, String extras) {
-        this.log(statsType, value, sensorSetting, null, new Date(System.currentTimeMillis()));
+        this.log(statsType, value, sensorSetting.getIdentifier(), null, new Date(System.currentTimeMillis()));
     }
 
     /**
@@ -88,14 +97,14 @@ public class StatsLogger {
      * @param extras
      * @param date
      */
-    public void log(StatsType statsType, Object value, SensorSetting sensorSetting, String extras, Date date) {
+    public void log(StatsType statsType, Object value, String deviceIdentifier, String extras, Date date) {
         if (statsType != null && value != null) {
 
-            System.out.println("[" + statsType.toString() + " ] " + sensorSetting.getName() + " = " + value);
+            System.out.println("[" + statsType.toString() + " ] " + deviceIdentifier + " = " + value);
 
             Map<String, String> postParams = new HashMap<>();
             postParams.put("value", value.toString());
-            postParams.put("deviceIdentifier", sensorSetting.getIdentifier());
+            postParams.put("deviceIdentifier", deviceIdentifier);
             postParams.put("extras", extras);
             postParams.put("date", sdf.format(date));
 

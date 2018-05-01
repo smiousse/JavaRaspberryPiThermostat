@@ -9,6 +9,9 @@ public class Settings {
     private ClimateSetting climateSetting;
     private HvacControllerSetting hvacControllerSetting;
 
+    private String masterOutsideTempSensorIdentifier;
+    private String masterInsideTempSensorIdentifier;
+
     private List<SensorSetting> sensorSettings;
 
     /**
@@ -67,6 +70,36 @@ public class Settings {
 
         this.sensorSettings.add(sensorSetting);
 
+    }
+
+    /**
+     * @return the masterOutsideTempSensorIdentifier
+     */
+    public String getMasterOutsideTempSensorIdentifier() {
+        return masterOutsideTempSensorIdentifier;
+    }
+
+    /**
+     * @param masterOutsideTempSensorIdentifier
+     * the masterOutsideTempSensorIdentifier to set
+     */
+    public void setMasterOutsideTempSensorIdentifier(String masterOutsideTempSensorIdentifier) {
+        this.masterOutsideTempSensorIdentifier = masterOutsideTempSensorIdentifier;
+    }
+
+    /**
+     * @return the masterInsideTempSensorIdentifier
+     */
+    public String getMasterInsideTempSensorIdentifier() {
+        return masterInsideTempSensorIdentifier;
+    }
+
+    /**
+     * @param masterInsideTempSensorIdentifier
+     * the masterInsideTempSensorIdentifier to set
+     */
+    public void setMasterInsideTempSensorIdentifier(String masterInsideTempSensorIdentifier) {
+        this.masterInsideTempSensorIdentifier = masterInsideTempSensorIdentifier;
     }
 
 }

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.github.smiousse.jarpit.model.HvacControllerSetting;
+import org.github.smiousse.jarpit.utils.StatsLogger;
+import org.github.smiousse.jarpit.utils.StatsLogger.StatsType;
 
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
@@ -13,6 +15,13 @@ import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 
 public class HvacController {
+
+    private static final String ON = "on";
+    private static final String OFF = "off";
+    private static final String DEVICE_IDENTIFER_COOL_COMPRESSOR = "hvac_cooling_compressor";
+    private static final String DEVICE_IDENTIFER_HEAT_COMPRESSOR = "hvac_heating_compressor";
+    private static final String DEVICE_IDENTIFER_FAN = "hvac_fan";
+    private static final String DEVICE_IDENTIFER_HEAT_ELEMENT = "hvac_heating_element";
 
     private HvacControllerSetting setting;
 
@@ -70,11 +79,12 @@ public class HvacController {
     private long lastSettingsUpdate = 0;
 
     private GpioController gpio;
+    private StatsLogger statsLogger;
 
     /**
      * @param setting
      */
-    public HvacController(HvacControllerSetting setting) {
+    public HvacController(HvacControllerSetting setting, StatsLogger statsLogger) {
         super();
         this.setting = setting;
         this.init();
@@ -183,6 +193,8 @@ public class HvacController {
             lastCompressorEnableTime = System.currentTimeMillis();
             // writeVerbose('Cooling enabled.', True);
 
+            statsLogger.log(StatsType.COOLING, ON, DEVICE_IDENTIFER_COOL_COMPRESSOR);
+
         } else {
             // writeVerbose('Disabling cooling...');
             pinHeatingCompessor.low();
@@ -193,7 +205,7 @@ public class HvacController {
             }
 
             isCoolingOn = false;
-            // writeVerbose('Cooling disabled.', True);
+            statsLogger.log(StatsType.COOLING, OFF, DEVICE_IDENTIFER_COOL_COMPRESSOR);
         }
 
         this.delay();
@@ -220,7 +232,7 @@ public class HvacController {
             // writeVerbose('Enabling fan...');
             pinFan.high();
             isFanOn = true;
-            // writeVerbose('Fan enabled.', True);
+            statsLogger.log(StatsType.FAN, ON, DEVICE_IDENTIFER_FAN);
 
         } else {
             // writeVerbose('Disabling fan...');
@@ -240,7 +252,7 @@ public class HvacController {
             }
 
             isFanOn = false;
-            // writeVerbose('Fan disabled.', True);
+            statsLogger.log(StatsType.FAN, OFF, DEVICE_IDENTIFER_FAN);
         }
 
         this.delay();
@@ -287,6 +299,7 @@ public class HvacController {
             lastCompressorEnableTime = System.currentTimeMillis();
             isHeatingCompressorOn = true;
             // writeVerbose('Heating enabled.', True);
+            statsLogger.log(StatsType.HEATING, ON, DEVICE_IDENTIFER_HEAT_COMPRESSOR);
 
         } else {
             // writeVerbose('Disabling heating...');
@@ -297,7 +310,7 @@ public class HvacController {
             }
 
             isHeatingCompressorOn = false;
-            // writeVerbose('Heating disabled.', True);
+            statsLogger.log(StatsType.HEATING, OFF, DEVICE_IDENTIFER_HEAT_COMPRESSOR);
         }
         this.delay();
     }
@@ -340,7 +353,7 @@ public class HvacController {
             pinHeatingElement.high();
             lastElementEnableTime = System.currentTimeMillis();
             isHeatingElementOn = true;
-            // writeVerbose('Heating enabled.', True);
+            statsLogger.log(StatsType.HEATING, ON, DEVICE_IDENTIFER_HEAT_ELEMENT);
 
         } else {
             // writeVerbose('Disabling heating...');
@@ -351,7 +364,7 @@ public class HvacController {
             }
 
             isHeatingElementOn = false;
-            // writeVerbose('Heating disabled.', True);
+            statsLogger.log(StatsType.HEATING, OFF, DEVICE_IDENTIFER_HEAT_ELEMENT);
         }
         this.delay();
     }

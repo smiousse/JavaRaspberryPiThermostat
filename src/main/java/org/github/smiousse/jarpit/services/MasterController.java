@@ -1,5 +1,6 @@
 package org.github.smiousse.jarpit.services;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -10,6 +11,7 @@ import org.github.smiousse.jarpit.api.sensors.TempSensor;
 import org.github.smiousse.jarpit.model.SensorSetting;
 import org.github.smiousse.jarpit.model.SensorSetting.SensorType;
 import org.github.smiousse.jarpit.model.Settings;
+import org.github.smiousse.jarpit.raspberrypi.hvac.ClimateManager;
 import org.github.smiousse.jarpit.raspberrypi.sensors.DHT11;
 import org.github.smiousse.jarpit.raspberrypi.sensors.DS18B20;
 import org.github.smiousse.jarpit.utils.StatsLogger;
@@ -20,6 +22,8 @@ public class MasterController {
     private final Map<String, Sensor> registredSensors = new LinkedHashMap<>();
 
     private final StatsLogger statsLogger = new StatsLogger("http://192.168.2.22:8080/rest/stats/add/");
+    private Settings settings = null;
+    private ClimateManager climateManager = null;
 
     public MasterController() {
 
@@ -30,6 +34,7 @@ public class MasterController {
      */
     public MasterController(Settings settings) {
         if (settings != null) {
+            this.settings = settings;
             for (SensorSetting sensorSetting : settings.getSensorSettings()) {
                 switch (sensorSetting.getSensorType()) {
                 case TEMPERATURE:
@@ -64,7 +69,16 @@ public class MasterController {
                     break;
                 }
             }
+
+            // this.climateManager = new ClimateManager(settings.getClimateSetting(), settings.getHvacControllerSetting(), statsLogger);
         }
+    }
+
+    /**
+     * 
+     */
+    public void checkClimate() {
+        this.climateManager.checkClimate(this.getInsideTemperature().doubleValue());
     }
 
     /**
@@ -83,6 +97,36 @@ public class MasterController {
 
         }
 
+    }
+
+    /**
+     * @return
+     */
+    public BigDecimal getInsideTemperature() {
+        if (settings != null && settings.getMasterInsideTempSensorIdentifier() != null) {
+            Sensor sensor = registredSensors.get(settings.getMasterInsideTempSensorIdentifier());
+            if (sensor != null && sensor instanceof TempSensor) {
+                sensor.updateReadings();
+                return ((TempSensor) sensor).getTemperature();
+            }
+
+        }
+        return BigDecimal.valueOf(22);
+    }
+
+    /**
+     * @return
+     */
+    public BigDecimal getOutsideTemperature() {
+        if (settings != null && settings.getMasterOutsideTempSensorIdentifier() != null) {
+            Sensor sensor = registredSensors.get(settings.getMasterOutsideTempSensorIdentifier());
+            if (sensor != null && sensor instanceof TempSensor) {
+                sensor.updateReadings();
+                return ((TempSensor) sensor).getTemperature();
+            }
+
+        }
+        return BigDecimal.valueOf(22);
     }
 
     /**

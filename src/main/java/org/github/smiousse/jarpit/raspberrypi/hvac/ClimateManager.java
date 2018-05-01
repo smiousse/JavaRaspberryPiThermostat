@@ -3,6 +3,7 @@ package org.github.smiousse.jarpit.raspberrypi.hvac;
 import org.github.smiousse.jarpit.model.ClimateSetting;
 import org.github.smiousse.jarpit.model.HvacControllerSetting;
 import org.github.smiousse.jarpit.model.HvacControllerSetting.FanMode;
+import org.github.smiousse.jarpit.utils.StatsLogger;
 
 public class ClimateManager {
 
@@ -13,15 +14,17 @@ public class ClimateManager {
     private ClimateSetting climateSetting;
 
     private HvacController hvacController;
+    private StatsLogger statsLogger;
 
     private long currentTime = 0;
 
     /**
      * @param temperatureSetting
      */
-    public ClimateManager(ClimateSetting climateSetting, HvacControllerSetting hvacControllerSetting) {
+    public ClimateManager(ClimateSetting climateSetting, HvacControllerSetting hvacControllerSetting, StatsLogger statsLogger) {
         super();
         this.climateSetting = climateSetting;
+        this.statsLogger = statsLogger;
         this.init(hvacControllerSetting);
     }
 
@@ -29,13 +32,13 @@ public class ClimateManager {
      * @param hvacControllerSetting
      */
     private void init(HvacControllerSetting hvacControllerSetting) {
-        hvacController = new HvacController(hvacControllerSetting);
+        hvacController = new HvacController(hvacControllerSetting, statsLogger);
     }
 
     /**
      * @param climateMode
      */
-    public void checkClimate(final ClimateMode climateMode, final double observedTemperature) {
+    public void checkClimate(final double observedTemperature) {
 
         // # This function is called if the compressor is in heat, cool or auto mode.
         // # First check the current temperature, set temperature, and threshold.
@@ -101,7 +104,8 @@ public class ClimateManager {
             if (FanMode.AUTO.equals(hvacController.getSetting().getFanMode())) {
                 hvacController.setFan(false, false);
             }
-        } else if (hotterThanMax && (ClimateMode.COOL.equals(climateMode) || ClimateMode.AUTO.equals(climateMode))) {
+        } else if (hotterThanMax
+                && (ClimateMode.COOL.equals(climateSetting.getClimateMode()) || ClimateMode.AUTO.equals(climateSetting.getClimateMode()))) {
             // writeVerbose('Temperature is too warm and A/C is enabled, activating A/C.');
             hvacController.setFan(true, true);
             if (hvacController.isHeatingCompressorOn()) {
@@ -112,13 +116,28 @@ public class ClimateManager {
             }
             hvacController.setCooling(true, false);
 
-        } else if (coolerThanMin && (ClimateMode.HEAT.equals(climateMode) || ClimateMode.AUTO.equals(climateMode))) {
+        } else if (coolerThanMin
+                && (ClimateMode.HEAT.equals(climateSetting.getClimateMode()) || ClimateMode.AUTO.equals(climateSetting.getClimateMode()))) {
             // writeVerbose('Temperature is too cold and heating is enabled, activating heater.');
             hvacController.setFan(true, true);
             if (hvacController.isCoolingOn()) {
                 hvacController.setCooling(false, true);
             }
             hvacController.setHeatingCompressor(true, false);
+        }
+    }
+
+    /**
+     * @param climateSetting
+     * @param hvacControllerSetting
+     */
+    public void updateSettings(ClimateSetting climateSetting, HvacControllerSetting hvacControllerSetting) {
+        this.climateSetting = climateSetting;
+        if (hvacControllerSetting != null) {
+            hvacController.onColse();
+            hvacController = null;
+
+            this.init(hvacControllerSetting);
         }
     }
 

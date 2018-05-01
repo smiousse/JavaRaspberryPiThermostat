@@ -54,6 +54,9 @@ public class Bootstrap {
                 "inside_temp_sensor_1", "Inside temperature sensor 1");
         settings.addSensor(insideSensor);
 
+        settings.setMasterInsideTempSensorIdentifier(insideSensor.getIdentifier());
+        settings.setMasterOutsideTempSensorIdentifier(outSideSensor.getIdentifier());
+
         return settings;
 
     }
