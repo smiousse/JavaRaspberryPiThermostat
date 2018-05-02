@@ -28,6 +28,7 @@ public class Bootstrap {
         MasterController master = new MasterController(getDefaultSetting());
 
         master.logSensorReadings();
+        master.pushJarpitStatus();
         master.dispose();
     }
 
@@ -54,8 +55,9 @@ public class Bootstrap {
                 "inside_temp_sensor_1", "Inside temperature sensor 1");
         settings.addSensor(insideSensor);
 
-        settings.setMasterInsideTempSensorIdentifier(insideSensor.getIdentifier());
+        settings.setMasterMainFloorTempSensorIdentifier(insideSensor.getIdentifier());
         settings.setMasterOutsideTempSensorIdentifier(outSideSensor.getIdentifier());
+        settings.setMasterOutsideHumiditySensorIdentifier(humiditySensor.getIdentifier());
 
         return settings;
 

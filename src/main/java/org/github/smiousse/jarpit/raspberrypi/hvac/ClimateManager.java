@@ -3,6 +3,7 @@ package org.github.smiousse.jarpit.raspberrypi.hvac;
 import org.github.smiousse.jarpit.model.ClimateSetting;
 import org.github.smiousse.jarpit.model.HvacControllerSetting;
 import org.github.smiousse.jarpit.model.HvacControllerSetting.FanMode;
+import org.github.smiousse.jarpit.model.JarpitStatus;
 import org.github.smiousse.jarpit.utils.StatsLogger;
 
 public class ClimateManager {
@@ -38,7 +39,7 @@ public class ClimateManager {
     /**
      * @param climateMode
      */
-    public void checkClimate(final double observedTemperature) {
+    public void checkClimate(final double observedTemperature, JarpitStatus jarpitStatus) {
 
         // # This function is called if the compressor is in heat, cool or auto mode.
         // # First check the current temperature, set temperature, and threshold.
@@ -104,6 +105,7 @@ public class ClimateManager {
             if (FanMode.AUTO.equals(hvacController.getSetting().getFanMode())) {
                 hvacController.setFan(false, false);
             }
+
         } else if (hotterThanMax
                 && (ClimateMode.COOL.equals(climateSetting.getClimateMode()) || ClimateMode.AUTO.equals(climateSetting.getClimateMode()))) {
             // writeVerbose('Temperature is too warm and A/C is enabled, activating A/C.');
@@ -125,6 +127,7 @@ public class ClimateManager {
             }
             hvacController.setHeatingCompressor(true, false);
         }
+        hvacController.updateJarpitStatus(jarpitStatus);
     }
 
     /**

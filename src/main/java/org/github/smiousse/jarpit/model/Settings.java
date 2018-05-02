@@ -10,7 +10,11 @@ public class Settings {
     private HvacControllerSetting hvacControllerSetting;
 
     private String masterOutsideTempSensorIdentifier;
-    private String masterInsideTempSensorIdentifier;
+    private String masterMainFloorTempSensorIdentifier;
+    private String masterBasementTempSensorIdentifier;
+
+    private String masterOutsideHumiditySensorIdentifier;
+    private String masterInsideHumiditySensorIdentifier;
 
     private List<SensorSetting> sensorSettings;
 
@@ -88,18 +92,63 @@ public class Settings {
     }
 
     /**
-     * @return the masterInsideTempSensorIdentifier
+     * @return the masterMainFloorTempSensorIdentifier
      */
-    public String getMasterInsideTempSensorIdentifier() {
-        return masterInsideTempSensorIdentifier;
+    public String getMasterMainFloorTempSensorIdentifier() {
+        return masterMainFloorTempSensorIdentifier;
     }
 
     /**
-     * @param masterInsideTempSensorIdentifier
-     * the masterInsideTempSensorIdentifier to set
+     * @param masterMainFloorTempSensorIdentifier
+     * the masterMainFloorTempSensorIdentifier to set
      */
-    public void setMasterInsideTempSensorIdentifier(String masterInsideTempSensorIdentifier) {
-        this.masterInsideTempSensorIdentifier = masterInsideTempSensorIdentifier;
+    public void setMasterMainFloorTempSensorIdentifier(String masterMainFloorTempSensorIdentifier) {
+        this.masterMainFloorTempSensorIdentifier = masterMainFloorTempSensorIdentifier;
+    }
+
+    /**
+     * @return the masterBasementTempSensorIdentifier
+     */
+    public String getMasterBasementTempSensorIdentifier() {
+        return masterBasementTempSensorIdentifier;
+    }
+
+    /**
+     * @param masterBasementTempSensorIdentifier
+     * the masterBasementTempSensorIdentifier to set
+     */
+    public void setMasterBasementTempSensorIdentifier(String masterBasementTempSensorIdentifier) {
+        this.masterBasementTempSensorIdentifier = masterBasementTempSensorIdentifier;
+    }
+
+    /**
+     * @return the masterOutsideHumiditySensorIdentifier
+     */
+    public String getMasterOutsideHumiditySensorIdentifier() {
+        return masterOutsideHumiditySensorIdentifier;
+    }
+
+    /**
+     * @param masterOutsideHumiditySensorIdentifier
+     * the masterOutsideHumiditySensorIdentifier to set
+     */
+    public void setMasterOutsideHumiditySensorIdentifier(String masterOutsideHumiditySensorIdentifier) {
+        this.masterOutsideHumiditySensorIdentifier = masterOutsideHumiditySensorIdentifier;
+    }
+
+    /**
+     * @return the masterInsideHumiditySensorIdentifier
+     */
+    public String getMasterInsideHumiditySensorIdentifier() {
+        return masterInsideHumiditySensorIdentifier;
+    }
+
+    /**
+     * @param masterInsideHumiditySensorIdentifier
+     * the masterInsideHumiditySensorIdentifier to set
+     */
+    public void setMasterInsideHumiditySensorIdentifier(String masterInsideHumiditySensorIdentifier) {
+        this.masterInsideHumiditySensorIdentifier = masterInsideHumiditySensorIdentifier;
     }
 
 }

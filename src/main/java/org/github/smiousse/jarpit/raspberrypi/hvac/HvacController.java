@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.github.smiousse.jarpit.model.HvacControllerSetting;
+import org.github.smiousse.jarpit.model.JarpitStatus;
 import org.github.smiousse.jarpit.utils.StatsLogger;
 import org.github.smiousse.jarpit.utils.StatsLogger.StatsType;
 
@@ -126,6 +127,16 @@ public class HvacController {
     public void onColse() {
         this.cleanUp();
         this.writeStatus();
+    }
+
+    /**
+     * @param jarpitStatus
+     */
+    protected void updateJarpitStatus(JarpitStatus jarpitStatus) {
+        jarpitStatus.setFanOn(this.isFanOn);
+        jarpitStatus.setCoolingCompressorOn(this.isCoolingOn);
+        jarpitStatus.setHeatingCompressorOn(this.isHeatingCompressorOn);
+        jarpitStatus.setHeatingElementOn(this.isHeatingElementOn);
     }
 
     /**
