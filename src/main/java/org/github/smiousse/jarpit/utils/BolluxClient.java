@@ -19,7 +19,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.github.smiousse.jarpit.model.JarpitStatus;
 import org.github.smiousse.jarpit.utils.StatsLogger.StatsType;
-import org.json.JSONObject;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class BolluxClient {
 
@@ -65,7 +66,8 @@ public class BolluxClient {
         if (jarpitStatus != null) {
 
             try {
-                this.doPostWithBody(this.baseUrl + "/rest/settings/update/status/jarpit", null, new JSONObject(jarpitStatus).toString());
+                this.doPostWithBody(this.baseUrl + "/rest/settings/update/status/jarpit", null,
+                        new String(new ObjectMapper().writeValueAsBytes(jarpitStatus)));
             }
             catch (Exception e) {
                 e.printStackTrace();

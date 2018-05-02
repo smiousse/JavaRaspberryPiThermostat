@@ -2,16 +2,28 @@ package org.github.smiousse.jarpit.model;
 
 import org.github.smiousse.jarpit.raspberrypi.hvac.ClimateManager.ClimateMode;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
  * @author smiousse
  *
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "climateMode", "temperatureMax", "temperatureMin", "temperatureThreshold" })
 public class ClimateSetting {
 
+    @JsonProperty("climateMode")
     private ClimateMode climateMode;
 
+    @JsonProperty("temperatureMax")
     private double temperatureMax = 24.5;
+
+    @JsonProperty("temperatureMin")
     private double temperatureMin = 19.5;
+
+    @JsonProperty("temperatureThreshold")
     private double temperatureThreshold = 0.5;
 
     /**

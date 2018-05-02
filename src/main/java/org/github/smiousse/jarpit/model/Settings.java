@@ -4,18 +4,38 @@ import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "climateSetting", "hvacControllerSetting", "masterOutsideTempSensorIdentifier", "masterMainFloorTempSensorIdentifier",
+        "masterBasementTempSensorIdentifier", "masterOutsideHumiditySensorIdentifier", "masterInsideHumiditySensorIdentifier",
+        "sensorSettings" })
 public class Settings {
 
+    @JsonProperty("climateSetting")
     private ClimateSetting climateSetting;
+
+    @JsonProperty("hvacControllerSetting")
     private HvacControllerSetting hvacControllerSetting;
 
+    @JsonProperty("masterOutsideTempSensorIdentifier")
     private String masterOutsideTempSensorIdentifier;
+
+    @JsonProperty("masterMainFloorTempSensorIdentifier")
     private String masterMainFloorTempSensorIdentifier;
+
+    @JsonProperty("masterBasementTempSensorIdentifier")
     private String masterBasementTempSensorIdentifier;
 
+    @JsonProperty("masterOutsideHumiditySensorIdentifier")
     private String masterOutsideHumiditySensorIdentifier;
+
+    @JsonProperty("masterInsideHumiditySensorIdentifier")
     private String masterInsideHumiditySensorIdentifier;
 
+    @JsonProperty("sensorSettings")
     private List<SensorSetting> sensorSettings;
 
     /**

@@ -1,5 +1,11 @@
 package org.github.smiousse.jarpit.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "sensorType", "tempSensorModel", "humiditySensorModel", "deviceId", "identifier", "name", "gpioPin" })
 public class SensorSetting {
 
     public enum SensorType {
@@ -14,13 +20,25 @@ public class SensorSetting {
         DHT11
     }
 
+    @JsonProperty("sensorType")
     private SensorType sensorType;
+
+    @JsonProperty("tempSensorModel")
     private TempSensorModel tempSensorModel;
+
+    @JsonProperty("humiditySensorModel")
     private HumiditySensorModel humiditySensorModel;
 
+    @JsonProperty("deviceId")
     private String deviceId;
+
+    @JsonProperty("identifier")
     private String identifier;
+
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("gpioPin")
     private int gpioPin;
 
     /**

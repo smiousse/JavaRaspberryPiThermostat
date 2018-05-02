@@ -1,26 +1,50 @@
 package org.github.smiousse.jarpit.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
  * @author smiousse
  *
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "pinFanNumber", "pinCompressorNumber", "pinCoolingNumber", "pinHeatElementNumber", "toggleDelay", "inTheBlindTime",
+        "compressorRecoveryTime", "compressorStickTime", "fanRecoveryTime", "fanMode" })
 public class HvacControllerSetting {
 
     public enum FanMode {
         ON, OFF, AUTO
     }
 
+    @JsonProperty("pinFanNumber")
     private int pinFanNumber = 17;
+
+    @JsonProperty("pinCompressorNumber")
     private int pinCompressorNumber = 27;
+
+    @JsonProperty("pinCoolingNumber")
     private int pinCoolingNumber = 22;
+
+    @JsonProperty("pinHeatElementNumber")
     private int pinHeatElementNumber = 22;
 
+    @JsonProperty("toggleDelay")
     private int toggleDelay = 1;
+
+    @JsonProperty("inTheBlindTime")
     private int inTheBlindTime = 300;
+
+    @JsonProperty("compressorRecoveryTime")
     private int compressorRecoveryTime = 60;
+
+    @JsonProperty("compressorStickTime")
     private int compressorStickTime = 60;
+
+    @JsonProperty("fanRecoveryTime")
     private int fanRecoveryTime = 2;
 
+    @JsonProperty("fanMode")
     private FanMode fanMode = FanMode.AUTO;
 
     /**

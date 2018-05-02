@@ -2,16 +2,36 @@ package org.github.smiousse.jarpit.model;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "outsideHumidity", "outsideTemp", "mainFloorTemp", "basementTemp", "fanOn", "heatingCompressorOn", "heatingElementOn",
+        "coolingCompressorOn" })
 public class JarpitStatus {
 
+    @JsonProperty("outsideHumidity")
     private BigDecimal outsideHumidity;
+    @JsonProperty("outsideTemp")
     private BigDecimal outsideTemp;
+
+    @JsonProperty("mainFloorTemp")
     private BigDecimal mainFloorTemp;
+
+    @JsonProperty("basementTemp")
     private BigDecimal basementTemp;
 
+    @JsonProperty("fanOn")
     private boolean fanOn = false;
+
+    @JsonProperty("heatingCompressorOn")
     private boolean heatingCompressorOn = false;
+
+    @JsonProperty("heatingElementOn")
     private boolean heatingElementOn = false;
+
+    @JsonProperty("coolingCompressorOn")
     private boolean coolingCompressorOn = false;
 
     /**
