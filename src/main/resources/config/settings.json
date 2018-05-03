@@ -1,48 +1,43 @@
 {
-  "climateSetting": {
-    "temperatureMax": 24.5,
-    "temperatureMin": 19.5,
-    "temperatureThreshold": 0.5
+  "climateSetting" : {
+    "temperatureMax" : 24.5,
+    "temperatureMin" : 19.5,
+    "temperatureThreshold" : 0.5
   },
-  "hvacControllerSetting": {
-    "compressorRecoveryTime": 60,
-    "compressorStickTime": 60,
-    "fanMode": "AUTO",
-    "fanRecoveryTime": 2,
-    "inTheBlindTime": 300,
-    "pinCompressorNumber": 27,
-    "pinCoolingNumber": 22,
-    "pinFanNumber": 17,
-    "pinHeatElementNumber": 22,
-    "toggleDelay": 1
+  "hvacControllerSetting" : {
+    "pinFanNumber" : 17,
+    "pinCompressorNumber" : 27,
+    "pinCoolingNumber" : 22,
+    "pinHeatElementNumber" : 22,
+    "toggleDelay" : 1,
+    "inTheBlindTime" : 300,
+    "compressorRecoveryTime" : 60,
+    "compressorStickTime" : 60,
+    "fanRecoveryTime" : 2,
+    "fanMode" : "AUTO"
   },
-  "sensorSettings": [
-    {
-      "deviceId": "28-0117c13a71ff",
-      "gpioPin": 0,
-      "humiditySensorModel": null,
-      "identifier": "outside_temp_sensor_1",
-      "name": "Outside temperature sensor 1",
-      "sensorType": "TEMPERATURE",
-      "tempSensorModel": "DS18B20_WP"
-    },
-    {
-      "deviceId": null,
-      "gpioPin": 25,
-      "humiditySensorModel": "DHT11",
-      "identifier": "outside_temp_sensor_1",
-      "name": "Outside temperature sensor 1",
-      "sensorType": "HUMIDITY",
-      "tempSensorModel": null
-    },
-    {
-      "deviceId": "28-0117c13a71ff",
-      "gpioPin": 0,
-      "humiditySensorModel": null,
-      "identifier": "outside_temp_sensor_1",
-      "name": "Outside temperature sensor 1",
-      "sensorType": "TEMPERATURE",
-      "tempSensorModel": "DS18B20_WP"
-    }
-  ]
+  "masterOutsideTempSensorIdentifier" : "outside_temp_sensor_1",
+  "masterMainFloorTempSensorIdentifier" : "inside_temp_sensor_1",
+  "masterOutsideHumiditySensorIdentifier" : "outside_humidity_sensor_1",
+  "sensorSettings" : [ {
+    "sensorType" : "TEMPERATURE",
+    "tempSensorModel" : "DS18B20_WP",
+    "deviceId" : "28-0117c13a71ff",
+    "identifier" : "outside_temp_sensor_1",
+    "name" : "Outside temperature sensor 1",
+    "gpioPin" : 0
+  }, {
+    "sensorType" : "HUMIDITY",
+    "humiditySensorModel" : "DHT11",
+    "identifier" : "outside_humidity_sensor_1",
+    "name" : "Outside humidity sensor 1",
+    "gpioPin" : 25
+  }, {
+    "sensorType" : "TEMPERATURE",
+    "tempSensorModel" : "DS18B20_WP",
+    "deviceId" : "28-0117b12203ff",
+    "identifier" : "inside_temp_sensor_1",
+    "name" : "Inside temperature sensor 1",
+    "gpioPin" : 0
+  } ]
 }

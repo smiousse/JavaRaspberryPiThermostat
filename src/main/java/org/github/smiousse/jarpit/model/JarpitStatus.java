@@ -161,4 +161,18 @@ public class JarpitStatus {
         this.coolingCompressorOn = coolingCompressorOn;
     }
 
+    /**
+     * @param fromJarpitStatus
+     */
+    public void update(JarpitStatus fromJarpitStatus) {
+        this.setBasementTemp(fromJarpitStatus.getBasementTemp());
+        this.setCoolingCompressorOn(fromJarpitStatus.isCoolingCompressorOn());
+        this.setFanOn(fromJarpitStatus.isFanOn());
+        this.setHeatingCompressorOn(fromJarpitStatus.isHeatingCompressorOn());
+        this.setHeatingElementOn(fromJarpitStatus.isHeatingElementOn());
+        this.setMainFloorTemp(fromJarpitStatus.getMainFloorTemp());
+        this.setOutsideHumidity(fromJarpitStatus.getOutsideHumidity());
+        this.setOutsideTemp(fromJarpitStatus.getOutsideTemp());
+    }
+
 }

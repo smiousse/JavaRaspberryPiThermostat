@@ -24,6 +24,14 @@ public class Bootstrap {
     public static void main(String[] args) {
 
         // System.out.println(new JSONObject(getDefaultSetting()).toString(2));
+        //
+        // try {
+        // new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT).writeValue(
+        // new File("/home/smiousse/data/projects/jarpit/src/main/resources/config/settings.json"), getDefaultSetting());
+        // }
+        // catch (Exception e) {
+        // e.printStackTrace();
+        // }
 
         MasterController master = new MasterController(getDefaultSetting());
 

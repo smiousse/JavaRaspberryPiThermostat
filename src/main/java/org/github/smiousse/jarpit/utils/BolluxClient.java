@@ -1,5 +1,6 @@
 package org.github.smiousse.jarpit.utils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -207,6 +208,20 @@ public class BolluxClient {
      * 
      */
     public void dispose() {
+    }
+
+    public static void main(String[] args) {
+        BolluxClient bolluxClient = new BolluxClient("http://127.0.0.1:8080");
+
+        JarpitStatus jarpitStatus = new JarpitStatus();
+        jarpitStatus.setBasementTemp(new BigDecimal("21.0"));
+        jarpitStatus.setMainFloorTemp(new BigDecimal("22.0"));
+        jarpitStatus.setOutsideTemp(new BigDecimal("10.3"));
+        jarpitStatus.setOutsideHumidity(new BigDecimal("55.1"));
+
+        bolluxClient.updateJarpitStatus(jarpitStatus);
+
+        bolluxClient.log(StatsType.TEMPERATURE, "34.9", "test", null, "201805022021");
     }
 
 }
