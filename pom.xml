@@ -70,7 +70,7 @@
         <artifactId>maven-eclipse-plugin</artifactId>
         <version>2.10</version>
         <configuration>
-          <projectNameTemplate>[artifactId]${eclipse.project.name.suffix}</projectNameTemplate>
+          <projectNameTemplate>[artifactId]</projectNameTemplate>
           <workspace>${basedir}</workspace>
           <workspaceCodeStylesURL>https://raw.githubusercontent.com/smiousse/jarpit/master/xdocs/eclipse-config/codestyle-formatter.xml</workspaceCodeStylesURL>
           <downloadSources>false</downloadSources>
