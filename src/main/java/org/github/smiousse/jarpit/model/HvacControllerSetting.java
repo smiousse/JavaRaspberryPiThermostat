@@ -197,4 +197,23 @@ public class HvacControllerSetting {
         this.fanMode = fanMode;
     }
 
+    /**
+     * @return
+     */
+    public String hash() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.compressorRecoveryTime);
+        sb.append(this.compressorStickTime);
+        sb.append(this.fanRecoveryTime);
+        sb.append(this.inTheBlindTime);
+        sb.append(this.pinCompressorNumber);
+        sb.append(this.pinCoolingNumber);
+        sb.append(this.pinFanNumber);
+        sb.append(this.pinHeatElementNumber);
+        sb.append(this.toggleDelay);
+        sb.append(this.fanMode.toString());
+        return sb.toString();
+    }
+
 }

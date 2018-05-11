@@ -171,4 +171,25 @@ public class Settings {
         this.masterInsideHumiditySensorIdentifier = masterInsideHumiditySensorIdentifier;
     }
 
+    /**
+     * @return
+     */
+    public String hash() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(climateSetting.hash());
+        sb.append(hvacControllerSetting.hash());
+        sb.append(masterOutsideTempSensorIdentifier);
+        sb.append(masterMainFloorTempSensorIdentifier);
+        sb.append(masterBasementTempSensorIdentifier);
+        sb.append(masterOutsideHumiditySensorIdentifier);
+        sb.append(masterInsideHumiditySensorIdentifier);
+        if (this.sensorSettings != null) {
+            for (SensorSetting sensorSetting : this.sensorSettings) {
+                sb.append(sensorSetting.hash());
+            }
+        }
+        return sb.toString();
+    }
+
 }

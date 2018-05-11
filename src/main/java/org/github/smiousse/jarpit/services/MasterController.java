@@ -15,6 +15,7 @@ import org.github.smiousse.jarpit.model.Settings;
 import org.github.smiousse.jarpit.raspberrypi.hvac.ClimateManager;
 import org.github.smiousse.jarpit.raspberrypi.sensors.DHT11;
 import org.github.smiousse.jarpit.raspberrypi.sensors.DS18B20;
+import org.github.smiousse.jarpit.utils.ApplicationPropertyManager;
 import org.github.smiousse.jarpit.utils.BolluxClient;
 import org.github.smiousse.jarpit.utils.StatsLogger;
 import org.github.smiousse.jarpit.utils.StatsLogger.StatsType;
@@ -28,55 +29,65 @@ public class MasterController {
     private ClimateManager climateManager = null;
     private final JarpitStatus jarpitStatus = new JarpitStatus();
 
-    private BolluxClient bolluxClient = new BolluxClient("http://192.168.2.22:8080");
+    private BolluxClient bolluxClient;
 
     public MasterController() {
+        this.bolluxClient = new BolluxClient(ApplicationPropertyManager.getApplicationPropertyValue("bollux.server.url"));
         this.statsLogger = new StatsLogger(bolluxClient);
     }
 
     /**
      * @param settings
      */
-    public MasterController(Settings settings) {
+    public MasterController(Settings defaultSettings) {
         this();
-        if (settings != null) {
-            this.settings = settings;
-            for (SensorSetting sensorSetting : settings.getSensorSettings()) {
-                switch (sensorSetting.getSensorType()) {
-                case TEMPERATURE:
-                    switch (sensorSetting.getTempSensorModel()) {
-                    case DHT11:
-                        registerSensor(new DHT11(sensorSetting));
-                        break;
-                    case DS18B20:
-                    case DS18B20_WP:
-                        registerSensor(new DS18B20(sensorSetting));
-                        break;
+        settings = bolluxClient.getSettings();
+        if (settings == null) {
+            this.settings = defaultSettings;
+        }
+        loadSettings();
 
-                    default:
-                        break;
-                    }
+        // this.climateManager = new ClimateManager(settings.getClimateSetting(), settings.getHvacControllerSetting(), statsLogger);
+
+    }
+
+    /**
+     * 
+     */
+    public void loadSettings() {
+        for (SensorSetting sensorSetting : settings.getSensorSettings()) {
+            switch (sensorSetting.getSensorType()) {
+            case TEMPERATURE:
+                switch (sensorSetting.getTempSensorModel()) {
+                case DHT11:
+                    registerSensor(new DHT11(sensorSetting));
                     break;
-                case HUMIDITY:
-                    switch (sensorSetting.getHumiditySensorModel()) {
-                    case DHT11:
-                        registerSensor(new DHT11(sensorSetting));
-                        break;
-
-                    default:
-                        break;
-                    }
-                    break;
-                case PRESSURE:
-
+                case DS18B20:
+                case DS18B20_WP:
+                    registerSensor(new DS18B20(sensorSetting));
                     break;
 
                 default:
                     break;
                 }
-            }
+                break;
+            case HUMIDITY:
+                switch (sensorSetting.getHumiditySensorModel()) {
+                case DHT11:
+                    registerSensor(new DHT11(sensorSetting));
+                    break;
 
-            // this.climateManager = new ClimateManager(settings.getClimateSetting(), settings.getHvacControllerSetting(), statsLogger);
+                default:
+                    break;
+                }
+                break;
+            case PRESSURE:
+
+                break;
+
+            default:
+                break;
+            }
         }
     }
 
@@ -85,6 +96,18 @@ public class MasterController {
      */
     public void checkClimate() {
         this.climateManager.checkClimate(this.getInsideTemperature().doubleValue(), jarpitStatus);
+    }
+
+    /**
+     * 
+     */
+    public void refreshSettings() {
+        Settings settings = bolluxClient.getSettings();
+        if (settings != null && this.isSettingsChanged(settings)) {
+            this.registredSensors.clear();
+            this.settings = settings;
+            this.loadSettings();
+        }
     }
 
     /**
@@ -153,6 +176,10 @@ public class MasterController {
         return BigDecimal.valueOf(22);
     }
 
+    /**
+     * @param sensor
+     * @return
+     */
     private boolean isMasterOutsideTempSensor(Sensor sensor) {
         if (sensor != null && sensor instanceof TempSensor
                 && sensor.getSensorSetting().getIdentifier().equals(settings.getMasterOutsideTempSensorIdentifier())) {
@@ -161,6 +188,10 @@ public class MasterController {
         return false;
     }
 
+    /**
+     * @param sensor
+     * @return
+     */
     private boolean isMasterMainFloorTempSensor(Sensor sensor) {
         if (sensor != null && sensor instanceof TempSensor
                 && sensor.getSensorSetting().getIdentifier().equals(settings.getMasterMainFloorTempSensorIdentifier())) {
@@ -169,6 +200,10 @@ public class MasterController {
         return false;
     }
 
+    /**
+     * @param sensor
+     * @return
+     */
     private boolean isMasterBasementTempSensor(Sensor sensor) {
         if (sensor != null && sensor instanceof TempSensor
                 && sensor.getSensorSetting().getIdentifier().equals(settings.getMasterBasementTempSensorIdentifier())) {
@@ -177,6 +212,10 @@ public class MasterController {
         return false;
     }
 
+    /**
+     * @param sensor
+     * @return
+     */
     private boolean isMasterOutsideHumiditySensor(Sensor sensor) {
         if (sensor != null && sensor instanceof HumiditySensor
                 && sensor.getSensorSetting().getIdentifier().equals(settings.getMasterOutsideHumiditySensorIdentifier())) {
@@ -200,11 +239,21 @@ public class MasterController {
     }
 
     /**
+     * @param settings
+     * @return
+     */
+    private boolean isSettingsChanged(Settings settings) {
+        return !this.settings.hash().equals(settings.hash());
+    }
+
+    /**
      * 
      */
     public void dispose() {
         bolluxClient.dispose();
         this.registredSensors.clear();
+        this.settings = null;
+        this.statsLogger = null;
     }
 
 }

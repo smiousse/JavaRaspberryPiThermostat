@@ -1,6 +1,5 @@
 package org.github.smiousse.jarpit.utils;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,15 +9,18 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.github.smiousse.jarpit.model.JarpitStatus;
+import org.github.smiousse.jarpit.model.Settings;
 import org.github.smiousse.jarpit.utils.StatsLogger.StatsType;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -74,6 +76,22 @@ public class BolluxClient {
                 e.printStackTrace();
             }
         }
+    }
+
+    public Settings getSettings() {
+        try {
+            String content = this.doGet(this.baseUrl + "/rest/settings/", null);
+
+            if (content != null) {
+                System.out.println(content);
+                return new ObjectMapper().readValue(content, Settings.class);
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -191,6 +209,40 @@ public class BolluxClient {
     }
 
     /**
+     * @param serverUrl
+     * @param postParams
+     * @param queryParams
+     * @return
+     * @throws Exception
+     */
+    private String doGet(String serverUrl, Map<String, String> queryParams) throws Exception {
+
+        CloseableHttpClient httpClient = null;
+        try {
+            // Build the server URI together with the parameters you wish to pass
+            URIBuilder uriBuilder = new URIBuilder(serverUrl);
+            addQueryParams(queryParams, uriBuilder);
+
+            HttpGet get = new HttpGet(uriBuilder.build());
+            get.addHeader("Accept", "application/json");
+
+            httpClient = getHttpClient();
+
+            return httpClient.execute(get, new BasicResponseHandler());
+
+        } finally {
+            if (httpClient != null) {
+                try {
+                    httpClient.close();
+                }
+                catch (Exception e) {
+                    // TSLT: handle exception
+                }
+            }
+        }
+    }
+
+    /**
      * @param queryParams
      * @param uriBuilder
      */
@@ -211,17 +263,24 @@ public class BolluxClient {
     }
 
     public static void main(String[] args) {
-        BolluxClient bolluxClient = new BolluxClient("http://127.0.0.1:8080");
+        BolluxClient bolluxClient = new BolluxClient("http://192.168.2.22:8080");
 
-        JarpitStatus jarpitStatus = new JarpitStatus();
-        jarpitStatus.setBasementTemp(new BigDecimal("21.0"));
-        jarpitStatus.setMainFloorTemp(new BigDecimal("22.0"));
-        jarpitStatus.setOutsideTemp(new BigDecimal("10.3"));
-        jarpitStatus.setOutsideHumidity(new BigDecimal("55.1"));
+        try {
+            System.out.println(new String(new ObjectMapper().writeValueAsBytes(bolluxClient.getSettings())));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        bolluxClient.updateJarpitStatus(jarpitStatus);
-
-        bolluxClient.log(StatsType.TEMPERATURE, "34.9", "test", null, "201805022021");
+        // JarpitStatus jarpitStatus = new JarpitStatus();
+        // jarpitStatus.setBasementTemp(new BigDecimal("21.0"));
+        // jarpitStatus.setMainFloorTemp(new BigDecimal("22.0"));
+        // jarpitStatus.setOutsideTemp(new BigDecimal("10.3"));
+        // jarpitStatus.setOutsideHumidity(new BigDecimal("55.1"));
+        //
+        // bolluxClient.updateJarpitStatus(jarpitStatus);
+        //
+        // bolluxClient.log(StatsType.TEMPERATURE, "34.9", "test", null, "201805022021");
     }
 
 }

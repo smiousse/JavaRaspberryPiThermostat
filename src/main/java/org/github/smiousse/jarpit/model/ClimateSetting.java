@@ -93,4 +93,16 @@ public class ClimateSetting {
         this.climateMode = climateMode;
     }
 
+    /**
+     * @return
+     */
+    public String hash() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.temperatureMax);
+        sb.append(this.temperatureMin);
+        sb.append(this.temperatureThreshold);
+        return sb.toString();
+    }
+
 }

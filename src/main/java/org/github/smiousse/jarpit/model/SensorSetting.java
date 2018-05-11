@@ -185,4 +185,19 @@ public class SensorSetting {
         this.gpioPin = gpioPin;
     }
 
+    /**
+     * @return
+     */
+    public String hash() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.deviceId);
+        sb.append(this.gpioPin);
+        sb.append(this.identifier);
+        sb.append(this.name);
+        sb.append(this.humiditySensorModel);
+        sb.append(this.sensorType);
+        sb.append(this.tempSensorModel);
+        return sb.toString();
+    }
+
 }

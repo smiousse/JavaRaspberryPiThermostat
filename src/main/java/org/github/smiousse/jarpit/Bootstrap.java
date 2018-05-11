@@ -8,6 +8,7 @@ import org.github.smiousse.jarpit.model.SensorSetting.SensorType;
 import org.github.smiousse.jarpit.model.SensorSetting.TempSensorModel;
 import org.github.smiousse.jarpit.model.Settings;
 import org.github.smiousse.jarpit.services.MasterController;
+import org.github.smiousse.jarpit.utils.ApplicationPropertyManager;
 
 import com.pi4j.io.gpio.RaspiPin;
 
@@ -19,25 +20,38 @@ public class Bootstrap {
 
     public static String APP_HOME = "../";
 
-    private Settings settings;
-
     public static void main(String[] args) {
 
-        // System.out.println(new JSONObject(getDefaultSetting()).toString(2));
-        //
-        // try {
-        // new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT).writeValue(
-        // new File("/home/smiousse/data/projects/jarpit/src/main/resources/config/settings.json"), getDefaultSetting());
-        // }
-        // catch (Exception e) {
-        // e.printStackTrace();
-        // }
+        intEnvProperties();
 
         MasterController master = new MasterController(getDefaultSetting());
 
         master.logSensorReadings();
         master.pushJarpitStatus();
         master.dispose();
+    }
+
+    /**
+     * 
+     */
+    private static void intEnvProperties() {
+
+        try {
+            if (System.getProperty(ApplicationPropertyManager.ENV_HOME_LOCATION) == null
+                    || System.getProperty(ApplicationPropertyManager.ENV_HOME_LOCATION).isEmpty()) {
+                System.setProperty(ApplicationPropertyManager.ENV_HOME_LOCATION, Bootstrap.class.getResource("../../../../").getFile());
+            }
+            System.setProperty(ApplicationPropertyManager.ENV_PROPERTY_FILE_LOCATION,
+                    System.getProperty(ApplicationPropertyManager.ENV_HOME_LOCATION) + "application.properties");
+
+            System.out.println("ENV_HOME_LOCATION = " + System.getProperty(ApplicationPropertyManager.ENV_HOME_LOCATION));
+            System.out.println("ENV_PROPERTY_FILE_LOCATION = " + System.getProperty(ApplicationPropertyManager.ENV_PROPERTY_FILE_LOCATION));
+
+            ApplicationPropertyManager.loadApplicationProperties();
+        }
+        catch (Exception e) {
+            // TSLT: handle exception
+        }
     }
 
     /**
