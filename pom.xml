@@ -72,7 +72,7 @@
         <configuration>
           <projectNameTemplate>[artifactId]${eclipse.project.name.suffix}</projectNameTemplate>
           <workspace>${basedir}</workspace>
-          <workspaceCodeStylesURL>http://svn.dexero.com/resource/eclipse-config/codestyle-formatter.xml</workspaceCodeStylesURL>
+          <workspaceCodeStylesURL>https://github.com/smiousse/jarpit/blob/master/xdocs/eclipse-config/codestyle-formatter.xml</workspaceCodeStylesURL>
           <downloadSources>false</downloadSources>
           <downloadJavadocs>false</downloadJavadocs>
           <wtpversion>2.0</wtpversion>
@@ -80,15 +80,15 @@
           <additionalConfig>
             <file>
               <name>.settings/org.eclipse.jdt.ui.prefs</name>
-              <url>http://svn.dexero.com/resource/eclipse-config/settings/org.eclipse.jdt.ui.prefs</url>
+              <url>https://github.com/smiousse/jarpit/blob/master/xdocs/eclipse-config/org.eclipse.jdt.ui.prefs</url>
             </file>
             <file>
               <name>.settings/org.eclipse.core.resources.prefs</name>
-              <url>http://svn.dexero.com/resource/eclipse-config/settings/org.eclipse.core.resources.prefs</url>
+              <url>https://github.com/smiousse/jarpit/blob/master/xdocs/eclipse-config/org.eclipse.core.resources.prefs</url>
             </file>
             <file>
               <name>.settings/org.eclipse.jdt.core.prefs</name>
-              <url>http://svn.dexero.com/resource/eclipse-config/settings/org.eclipse.jdt.core.prefs.1.8</url>
+              <url>https://github.com/smiousse/jarpit/blob/master/xdocs/eclipse-config/org.eclipse.jdt.core.prefs.1.8</url>
             </file>
           </additionalConfig>
         </configuration>
