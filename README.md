@@ -18,3 +18,9 @@ Temperature sensor and Humidity sensor
 Temperature sensor
 
 ![ds18b20 sensor](https://github.com/smiousse/jarpit/blob/master/site/ds18b20.png)
+
+### HVAC Relay module
+
+Wired for HVAC Relay module
+
+![ds18b20 sensor](https://github.com/smiousse/jarpit/blob/master/site/hvac_controller.png)
