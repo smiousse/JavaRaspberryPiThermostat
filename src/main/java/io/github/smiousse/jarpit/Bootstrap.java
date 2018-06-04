@@ -1,15 +1,15 @@
 package io.github.smiousse.jarpit;
 
-import com.pi4j.io.gpio.RaspiPin;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SimpleScheduleBuilder;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
 
-import io.github.smiousse.jarpit.model.ClimateSetting;
-import io.github.smiousse.jarpit.model.HvacControllerSetting;
-import io.github.smiousse.jarpit.model.SensorSetting;
-import io.github.smiousse.jarpit.model.Settings;
-import io.github.smiousse.jarpit.model.SensorSetting.HumiditySensorModel;
-import io.github.smiousse.jarpit.model.SensorSetting.SensorType;
-import io.github.smiousse.jarpit.model.SensorSetting.TempSensorModel;
-import io.github.smiousse.jarpit.services.MasterController;
+import io.github.smiousse.jarpit.services.MasterControllerJob;
 import io.github.smiousse.jarpit.utils.ApplicationPropertyManager;
 
 /**
@@ -19,16 +19,51 @@ import io.github.smiousse.jarpit.utils.ApplicationPropertyManager;
 public class Bootstrap {
 
     public static String APP_HOME = "../";
+    private static Scheduler scheduler;
 
     public static void main(String[] args) {
 
         intEnvProperties();
 
-        MasterController master = new MasterController(getDefaultSetting());
+        startQuartz();
 
-        master.logSensorReadings();
-        master.pushJarpitStatus();
-        master.dispose();
+    }
+
+    private static void startQuartz() {
+        try {
+            // Grab the Scheduler instance from the Factory
+            scheduler = StdSchedulerFactory.getDefaultScheduler();
+
+            // and start it off
+            scheduler.start();
+
+            JobDetail job = JobBuilder.newJob(MasterControllerJob.class).withIdentity("job1", "group1").build();
+
+            // Trigger the job to run now, and then repeat every 40 seconds
+            Trigger trigger = TriggerBuilder.newTrigger().withIdentity("trigger1", "group1").startNow()
+                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(30).repeatForever()).build();
+
+            // Tell quartz to schedule the job using our trigger
+            scheduler.scheduleJob(job, trigger);
+
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+
+                @Override
+                public void run() {
+                    super.run();
+                    try {
+                        scheduler.shutdown(true);
+                    }
+                    catch (SchedulerException se) {
+                        se.printStackTrace();
+                    }
+                }
+            });
+
+        }
+        catch (SchedulerException se) {
+            se.printStackTrace();
+        }
     }
 
     /**
@@ -52,37 +87,6 @@ public class Bootstrap {
         catch (Exception e) {
             // TSLT: handle exception
         }
-    }
-
-    /**
-     * @return
-     */
-    private static Settings getDefaultSetting() {
-        Settings settings = new Settings();
-        settings.setHvacControllerSetting(new HvacControllerSetting());
-        settings.setClimateSetting(new ClimateSetting());
-
-        // Outside temprature sensor
-        SensorSetting outSideSensor = new SensorSetting(SensorType.TEMPERATURE, TempSensorModel.DS18B20_WP, "28-0117c13a71ff",
-                "outside_temp_sensor_1", "Outside temperature sensor 1");
-        settings.addSensor(outSideSensor);
-
-        // Outside humidity sensor
-        SensorSetting humiditySensor = new SensorSetting(SensorType.HUMIDITY, HumiditySensorModel.DHT11, "outside_humidity_sensor_1",
-                "Outside humidity sensor 1", RaspiPin.GPIO_25.getAddress());
-        settings.addSensor(humiditySensor);
-
-        // Inside temprature sensor
-        SensorSetting insideSensor = new SensorSetting(SensorType.TEMPERATURE, TempSensorModel.DS18B20_WP, "28-0117b12203ff",
-                "inside_temp_sensor_1", "Inside temperature sensor 1");
-        settings.addSensor(insideSensor);
-
-        settings.setMasterMainFloorTempSensorIdentifier(insideSensor.getIdentifier());
-        settings.setMasterOutsideTempSensorIdentifier(outSideSensor.getIdentifier());
-        settings.setMasterOutsideHumiditySensorIdentifier(humiditySensor.getIdentifier());
-
-        return settings;
-
     }
 
 }
