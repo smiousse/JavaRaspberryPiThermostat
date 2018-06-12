@@ -5,9 +5,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author smiousse
  * @version $Rev$ $Date$
@@ -17,7 +14,7 @@ public class ApplicationPropertyManager {
     public static final String ENV_HOME_LOCATION = "bollux.home.path";
     public static final String ENV_PROPERTY_FILE_LOCATION = "bollux.env.application.property.file";
 
-    private static final Logger log = LoggerFactory.getLogger(ApplicationPropertyManager.class);
+    // private static final Logger log = LoggerFactory.getLogger(ApplicationPropertyManager.class);
     private static final String DEFAULT_APP_PROPERTIES_FILENAME = "default.properties";
     private static Properties appProperties;
 

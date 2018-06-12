@@ -1,10 +1,12 @@
 package io.github.smiousse.jarpit.services;
 
+import com.pi4j.io.gpio.RaspiPin;
+
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-
-import com.pi4j.io.gpio.RaspiPin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.github.smiousse.jarpit.model.ClimateSetting;
 import io.github.smiousse.jarpit.model.HvacControllerSetting;
@@ -16,6 +18,7 @@ import io.github.smiousse.jarpit.model.Settings;
 
 public class MasterControllerJob implements Job {
 
+    private static final Logger log = LoggerFactory.getLogger(MasterControllerJob.class);
     private static MasterController master;
 
     static {
@@ -25,6 +28,8 @@ public class MasterControllerJob implements Job {
 
     @Override
     public void execute(JobExecutionContext paramJobExecutionContext) throws JobExecutionException {
+
+        log.trace("MasterControllerJob execute");
         master.refreshSettings();
         master.logSensorReadings();
         master.pushJarpitStatus();

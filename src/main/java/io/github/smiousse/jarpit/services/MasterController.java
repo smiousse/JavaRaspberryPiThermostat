@@ -1,5 +1,8 @@
 package io.github.smiousse.jarpit.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -9,18 +12,17 @@ import io.github.smiousse.jarpit.api.sensors.HumiditySensor;
 import io.github.smiousse.jarpit.api.sensors.Sensor;
 import io.github.smiousse.jarpit.api.sensors.TempSensor;
 import io.github.smiousse.jarpit.model.JarpitStatus;
-import io.github.smiousse.jarpit.model.SensorSetting;
 import io.github.smiousse.jarpit.model.SensorSetting.SensorType;
 import io.github.smiousse.jarpit.model.Settings;
 import io.github.smiousse.jarpit.raspberrypi.hvac.ClimateManager;
-import io.github.smiousse.jarpit.raspberrypi.sensors.DHT11;
-import io.github.smiousse.jarpit.raspberrypi.sensors.DS18B20;
 import io.github.smiousse.jarpit.utils.ApplicationPropertyManager;
 import io.github.smiousse.jarpit.utils.BolluxClient;
 import io.github.smiousse.jarpit.utils.StatsLogger;
 import io.github.smiousse.jarpit.utils.StatsLogger.StatsType;
 
 public class MasterController {
+
+    private static final Logger log = LoggerFactory.getLogger(MasterController.class);
 
     private final Map<String, Sensor> registredSensors = new LinkedHashMap<>();
 
@@ -55,40 +57,49 @@ public class MasterController {
      * 
      */
     public void loadSettings() {
-        for (SensorSetting sensorSetting : settings.getSensorSettings()) {
-            switch (sensorSetting.getSensorType()) {
-            case TEMPERATURE:
-                switch (sensorSetting.getTempSensorModel()) {
-                case DHT11:
-                    registerSensor(new DHT11(sensorSetting));
-                    break;
-                case DS18B20:
-                case DS18B20_WP:
-                    registerSensor(new DS18B20(sensorSetting));
-                    break;
-
-                default:
-                    break;
-                }
-                break;
-            case HUMIDITY:
-                switch (sensorSetting.getHumiditySensorModel()) {
-                case DHT11:
-                    registerSensor(new DHT11(sensorSetting));
-                    break;
-
-                default:
-                    break;
-                }
-                break;
-            case PRESSURE:
-
-                break;
-
-            default:
-                break;
-            }
-        }
+        // for (SensorSetting sensorSetting : settings.getSensorSettings()) {
+        // try {
+        // switch (sensorSetting.getSensorType()) {
+        // case TEMPERATURE:
+        // switch (sensorSetting.getTempSensorModel()) {
+        // case DHT11:
+        // registerSensor(new DHT11(sensorSetting));
+        // break;
+        // case DS18B20:
+        // case DS18B20_WP:
+        // registerSensor(new DS18B20(sensorSetting));
+        // break;
+        //
+        // default:
+        // break;
+        // }
+        // break;
+        // case HUMIDITY:
+        // switch (sensorSetting.getHumiditySensorModel()) {
+        // case DHT11:
+        // registerSensor(new DHT11(sensorSetting));
+        // break;
+        //
+        // default:
+        // break;
+        // }
+        // break;
+        // case PRESSURE:
+        //
+        // break;
+        //
+        // default:
+        // break;
+        // }
+        // }
+        // catch (RuntimeException re) {
+        // log.error("loadSettings", re);
+        // }
+        // catch (Exception e) {
+        // log.error("loadSettings", e);
+        // }
+        //
+        // }
     }
 
     /**
@@ -102,6 +113,7 @@ public class MasterController {
      * 
      */
     public void refreshSettings() {
+        log.debug("Refresh setings");
         Settings settings = bolluxClient.getSettings();
         if (settings != null && this.isSettingsChanged(settings)) {
             this.registredSensors.clear();

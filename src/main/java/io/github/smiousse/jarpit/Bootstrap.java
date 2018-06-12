@@ -8,6 +8,8 @@ import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.github.smiousse.jarpit.services.MasterControllerJob;
 import io.github.smiousse.jarpit.utils.ApplicationPropertyManager;
@@ -17,6 +19,8 @@ import io.github.smiousse.jarpit.utils.ApplicationPropertyManager;
  *
  */
 public class Bootstrap {
+
+    private static final Logger log = LoggerFactory.getLogger(Bootstrap.class);
 
     public static String APP_HOME = "../";
     private static Scheduler scheduler;
@@ -37,14 +41,16 @@ public class Bootstrap {
             // and start it off
             scheduler.start();
 
-            JobDetail job = JobBuilder.newJob(MasterControllerJob.class).withIdentity("job1", "group1").build();
+            JobDetail job = JobBuilder.newJob(MasterControllerJob.class).withIdentity("MasterControllerJob", "Master").build();
 
             // Trigger the job to run now, and then repeat every 40 seconds
-            Trigger trigger = TriggerBuilder.newTrigger().withIdentity("trigger1", "group1").startNow()
-                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(30).repeatForever()).build();
+            Trigger trigger = TriggerBuilder.newTrigger().withIdentity("MasterControllerJobTrigger", "Master")
+                    .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever(5)).startNow().build();
 
             // Tell quartz to schedule the job using our trigger
             scheduler.scheduleJob(job, trigger);
+
+            log.info("scheduler.start()");
 
             Runtime.getRuntime().addShutdownHook(new Thread() {
 
@@ -52,6 +58,7 @@ public class Bootstrap {
                 public void run() {
                     super.run();
                     try {
+                        System.out.println("Shuting down JarPit");
                         scheduler.shutdown(true);
                     }
                     catch (SchedulerException se) {
@@ -85,7 +92,7 @@ public class Bootstrap {
             ApplicationPropertyManager.loadApplicationProperties();
         }
         catch (Exception e) {
-            // TSLT: handle exception
+            e.printStackTrace();
         }
     }
 
