@@ -1,9 +1,6 @@
 package io.github.smiousse.jarpit.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -20,7 +17,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import io.github.smiousse.jarpit.model.JarpitStatus;
 import io.github.smiousse.jarpit.model.Settings;
@@ -84,7 +84,7 @@ public class BolluxClient {
             String content = this.doGet(this.baseUrl + "/rest/settings/", null);
 
             if (content != null) {
-                System.out.println(content);
+                // System.out.println(content);
                 return new ObjectMapper().readValue(content, Settings.class);
             }
 

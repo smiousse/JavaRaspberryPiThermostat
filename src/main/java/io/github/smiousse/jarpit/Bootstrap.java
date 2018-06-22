@@ -50,7 +50,7 @@ public class Bootstrap {
             // Tell quartz to schedule the job using our trigger
             scheduler.scheduleJob(job, trigger);
 
-            log.info("scheduler.start()");
+            // log.info("scheduler.start()");
 
             Runtime.getRuntime().addShutdownHook(new Thread() {
 

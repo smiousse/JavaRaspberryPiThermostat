@@ -1,5 +1,8 @@
 package io.github.smiousse.jarpit.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,9 +15,12 @@ import io.github.smiousse.jarpit.api.sensors.HumiditySensor;
 import io.github.smiousse.jarpit.api.sensors.Sensor;
 import io.github.smiousse.jarpit.api.sensors.TempSensor;
 import io.github.smiousse.jarpit.model.JarpitStatus;
+import io.github.smiousse.jarpit.model.SensorSetting;
 import io.github.smiousse.jarpit.model.SensorSetting.SensorType;
 import io.github.smiousse.jarpit.model.Settings;
 import io.github.smiousse.jarpit.raspberrypi.hvac.ClimateManager;
+import io.github.smiousse.jarpit.raspberrypi.sensors.DHT11;
+import io.github.smiousse.jarpit.raspberrypi.sensors.DS18B20;
 import io.github.smiousse.jarpit.utils.ApplicationPropertyManager;
 import io.github.smiousse.jarpit.utils.BolluxClient;
 import io.github.smiousse.jarpit.utils.StatsLogger;
@@ -57,49 +63,49 @@ public class MasterController {
      * 
      */
     public void loadSettings() {
-        // for (SensorSetting sensorSetting : settings.getSensorSettings()) {
-        // try {
-        // switch (sensorSetting.getSensorType()) {
-        // case TEMPERATURE:
-        // switch (sensorSetting.getTempSensorModel()) {
-        // case DHT11:
-        // registerSensor(new DHT11(sensorSetting));
-        // break;
-        // case DS18B20:
-        // case DS18B20_WP:
-        // registerSensor(new DS18B20(sensorSetting));
-        // break;
-        //
-        // default:
-        // break;
-        // }
-        // break;
-        // case HUMIDITY:
-        // switch (sensorSetting.getHumiditySensorModel()) {
-        // case DHT11:
-        // registerSensor(new DHT11(sensorSetting));
-        // break;
-        //
-        // default:
-        // break;
-        // }
-        // break;
-        // case PRESSURE:
-        //
-        // break;
-        //
-        // default:
-        // break;
-        // }
-        // }
-        // catch (RuntimeException re) {
-        // log.error("loadSettings", re);
-        // }
-        // catch (Exception e) {
-        // log.error("loadSettings", e);
-        // }
-        //
-        // }
+        for (SensorSetting sensorSetting : settings.getSensorSettings()) {
+            try {
+                switch (sensorSetting.getSensorType()) {
+                case TEMPERATURE:
+                    switch (sensorSetting.getTempSensorModel()) {
+                    case DHT11:
+                        registerSensor(new DHT11(sensorSetting));
+                        break;
+                    case DS18B20:
+                    case DS18B20_WP:
+                        registerSensor(new DS18B20(sensorSetting));
+                        break;
+
+                    default:
+                        break;
+                    }
+                    break;
+                case HUMIDITY:
+                    switch (sensorSetting.getHumiditySensorModel()) {
+                    case DHT11:
+                        registerSensor(new DHT11(sensorSetting));
+                        break;
+
+                    default:
+                        break;
+                    }
+                    break;
+                case PRESSURE:
+
+                    break;
+
+                default:
+                    break;
+                }
+            }
+            catch (RuntimeException re) {
+                log.error("loadSettings", re);
+            }
+            catch (Exception e) {
+                log.error("loadSettings", e);
+            }
+
+        }
     }
 
     /**
@@ -116,7 +122,15 @@ public class MasterController {
         log.debug("Refresh setings");
         Settings settings = bolluxClient.getSettings();
         if (settings != null && this.isSettingsChanged(settings)) {
+            log.debug("Clear old settings, and reload");
             this.registredSensors.clear();
+            try {
+                log.info("new settings = "
+                        + new String(new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT).writeValueAsBytes(jarpitStatus)));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
             this.settings = settings;
             this.loadSettings();
         }
@@ -126,6 +140,14 @@ public class MasterController {
      * 
      */
     public void pushJarpitStatus() {
+        log.debug("pushJarpitStatus");
+        try {
+            log.info("jarpitStatus = "
+                    + new String(new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT).writeValueAsBytes(jarpitStatus)));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         bolluxClient.updateJarpitStatus(jarpitStatus);
     }
 

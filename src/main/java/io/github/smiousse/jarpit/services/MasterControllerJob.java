@@ -1,7 +1,5 @@
 package io.github.smiousse.jarpit.services;
 
-import com.pi4j.io.gpio.RaspiPin;
-
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -11,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import io.github.smiousse.jarpit.model.ClimateSetting;
 import io.github.smiousse.jarpit.model.HvacControllerSetting;
 import io.github.smiousse.jarpit.model.SensorSetting;
-import io.github.smiousse.jarpit.model.SensorSetting.HumiditySensorModel;
 import io.github.smiousse.jarpit.model.SensorSetting.SensorType;
 import io.github.smiousse.jarpit.model.SensorSetting.TempSensorModel;
 import io.github.smiousse.jarpit.model.Settings;
@@ -45,22 +42,26 @@ public class MasterControllerJob implements Job {
 
         // Outside temprature sensor
         SensorSetting outSideSensor = new SensorSetting(SensorType.TEMPERATURE, TempSensorModel.DS18B20_WP, "28-0117c13a71ff",
-                "outside_temp_sensor_1", "Outside temperature sensor 1");
+                "outside_temp_sensor_1", "Outside");
         settings.addSensor(outSideSensor);
 
         // Outside humidity sensor
-        SensorSetting humiditySensor = new SensorSetting(SensorType.HUMIDITY, HumiditySensorModel.DHT11, "outside_humidity_sensor_1",
-                "Outside humidity sensor 1", RaspiPin.GPIO_25.getAddress());
-        settings.addSensor(humiditySensor);
+        // SensorSetting humiditySensor = new SensorSetting(SensorType.HUMIDITY, HumiditySensorModel.DHT11, "outside_humidity_sensor_1",
+        // "Outside humidity sensor 1", RaspiPin.GPIO_25.getAddress());
+        // settings.addSensor(humiditySensor);
 
         // Inside temprature sensor
-        SensorSetting insideSensor = new SensorSetting(SensorType.TEMPERATURE, TempSensorModel.DS18B20_WP, "28-0117b12203ff",
-                "inside_temp_sensor_1", "Inside temperature sensor 1");
-        settings.addSensor(insideSensor);
+        SensorSetting basementSensor = new SensorSetting(SensorType.TEMPERATURE, TempSensorModel.DS18B20_WP, "28-0217c14218ff",
+                "basement_temp_sensor_1", "Basement");
+        settings.addSensor(basementSensor);
 
-        settings.setMasterMainFloorTempSensorIdentifier(insideSensor.getIdentifier());
+        SensorSetting mainFloorSensor = new SensorSetting(SensorType.TEMPERATURE, TempSensorModel.DS18B20_WP, "28-0117b12203ff",
+                "main_floor_temp_sensor_1", "Main floor");
+        settings.addSensor(mainFloorSensor);
+
+        settings.setMasterMainFloorTempSensorIdentifier(mainFloorSensor.getIdentifier());
         settings.setMasterOutsideTempSensorIdentifier(outSideSensor.getIdentifier());
-        settings.setMasterOutsideHumiditySensorIdentifier(humiditySensor.getIdentifier());
+        // settings.setMasterOutsideHumiditySensorIdentifier(humiditySensor.getIdentifier());
 
         return settings;
 

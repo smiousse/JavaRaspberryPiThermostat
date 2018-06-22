@@ -1,3 +1,3 @@
 #!/bin/sh
 echo -- Starting JARPIT  ----------------
-java -jar jarpit-1.0-SNAPSHOT-jar-with-dependencies.jar  
+java -Djarpit.home.path=/home/pi/jarpit/ -jar jarpit-1.0-SNAPSHOT-jar-with-dependencies.jar  

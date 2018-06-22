@@ -11,8 +11,8 @@ import java.util.Properties;
  */
 public class ApplicationPropertyManager {
 
-    public static final String ENV_HOME_LOCATION = "bollux.home.path";
-    public static final String ENV_PROPERTY_FILE_LOCATION = "bollux.env.application.property.file";
+    public static final String ENV_HOME_LOCATION = "jarpit.home.path";
+    public static final String ENV_PROPERTY_FILE_LOCATION = "jarpit.env.application.property.file";
 
     // private static final Logger log = LoggerFactory.getLogger(ApplicationPropertyManager.class);
     private static final String DEFAULT_APP_PROPERTIES_FILENAME = "default.properties";
