@@ -49,10 +49,10 @@ public class MasterController {
      */
     public MasterController(Settings defaultSettings) {
         this();
-        settings = bolluxClient.getSettings();
-        if (settings == null) {
-            this.settings = defaultSettings;
-        }
+        // settings = bolluxClient.getSettings();
+        // if (settings == null) {
+        this.settings = defaultSettings;
+        // }
         loadSettings();
 
         // this.climateManager = new ClimateManager(settings.getClimateSetting(), settings.getHvacControllerSetting(), statsLogger);
@@ -155,6 +155,7 @@ public class MasterController {
      * 
      */
     public void logSensorReadings() {
+        log.debug("logSensorReadings");
         Sensor sensor = null;
         for (String deviceIdentifier : registredSensors.keySet()) {
             sensor = registredSensors.get(deviceIdentifier);
@@ -167,6 +168,7 @@ public class MasterController {
                 value = ((HumiditySensor) sensor).getHumidity();
                 statsLogger.log(StatsType.HUMIDITY, value, sensor.getSensorSetting());
             }
+            log.debug("value = " + value);
             if (isMasterMainFloorTempSensor(sensor)) {
                 jarpitStatus.setMainFloorTemp(value);
             } else if (isMasterBasementTempSensor(sensor)) {

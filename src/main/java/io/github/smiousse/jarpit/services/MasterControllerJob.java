@@ -27,7 +27,7 @@ public class MasterControllerJob implements Job {
     public void execute(JobExecutionContext paramJobExecutionContext) throws JobExecutionException {
 
         log.trace("MasterControllerJob execute");
-        master.refreshSettings();
+        // master.refreshSettings();
         master.logSensorReadings();
         master.pushJarpitStatus();
     }

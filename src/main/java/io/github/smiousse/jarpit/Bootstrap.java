@@ -45,7 +45,7 @@ public class Bootstrap {
 
             // Trigger the job to run now, and then repeat every 40 seconds
             Trigger trigger = TriggerBuilder.newTrigger().withIdentity("MasterControllerJobTrigger", "Master")
-                    .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever(5)).startNow().build();
+                    .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever(60)).startNow().build();
 
             // Tell quartz to schedule the job using our trigger
             scheduler.scheduleJob(job, trigger);
