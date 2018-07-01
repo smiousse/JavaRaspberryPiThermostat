@@ -40,6 +40,13 @@ public class SensorReading {
     private String stringValue;
 
     /**
+     * 
+     */
+    public SensorReading() {
+        super();
+    }
+
+    /**
      * @param identifier
      * @param decimalValue
      */
