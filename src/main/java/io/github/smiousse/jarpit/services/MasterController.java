@@ -15,6 +15,7 @@ import io.github.smiousse.jarpit.api.sensors.HumiditySensor;
 import io.github.smiousse.jarpit.api.sensors.Sensor;
 import io.github.smiousse.jarpit.api.sensors.TempSensor;
 import io.github.smiousse.jarpit.model.JarpitStatus;
+import io.github.smiousse.jarpit.model.SensorReading;
 import io.github.smiousse.jarpit.model.SensorSetting;
 import io.github.smiousse.jarpit.model.SensorSetting.SensorType;
 import io.github.smiousse.jarpit.model.Settings;
@@ -155,6 +156,7 @@ public class MasterController {
      * 
      */
     public void logSensorReadings() {
+        jarpitStatus.getSensorReadings().clear();
         log.debug("logSensorReadings");
         Sensor sensor = null;
         for (String deviceIdentifier : registredSensors.keySet()) {
@@ -169,15 +171,8 @@ public class MasterController {
                 statsLogger.log(StatsType.HUMIDITY, value, sensor.getSensorSetting());
             }
             log.debug("value = " + value);
-            if (isMasterMainFloorTempSensor(sensor)) {
-                jarpitStatus.setMainFloorTemp(value);
-            } else if (isMasterBasementTempSensor(sensor)) {
-                jarpitStatus.setBasementTemp(value);
-            } else if (isMasterOutsideTempSensor(sensor)) {
-                jarpitStatus.setOutsideTemp(value);
-            } else if (isMasterOutsideHumiditySensor(sensor)) {
-                jarpitStatus.setOutsideHumidity(value);
-            }
+            jarpitStatus.getSensorReadings().add(new SensorReading(sensor.getSensorSetting().getIdentifier(), value));
+
         }
 
     }
@@ -210,54 +205,6 @@ public class MasterController {
 
         }
         return BigDecimal.valueOf(22);
-    }
-
-    /**
-     * @param sensor
-     * @return
-     */
-    private boolean isMasterOutsideTempSensor(Sensor sensor) {
-        if (sensor != null && sensor instanceof TempSensor
-                && sensor.getSensorSetting().getIdentifier().equals(settings.getMasterOutsideTempSensorIdentifier())) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @param sensor
-     * @return
-     */
-    private boolean isMasterMainFloorTempSensor(Sensor sensor) {
-        if (sensor != null && sensor instanceof TempSensor
-                && sensor.getSensorSetting().getIdentifier().equals(settings.getMasterMainFloorTempSensorIdentifier())) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @param sensor
-     * @return
-     */
-    private boolean isMasterBasementTempSensor(Sensor sensor) {
-        if (sensor != null && sensor instanceof TempSensor
-                && sensor.getSensorSetting().getIdentifier().equals(settings.getMasterBasementTempSensorIdentifier())) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @param sensor
-     * @return
-     */
-    private boolean isMasterOutsideHumiditySensor(Sensor sensor) {
-        if (sensor != null && sensor instanceof HumiditySensor
-                && sensor.getSensorSetting().getIdentifier().equals(settings.getMasterOutsideHumiditySensorIdentifier())) {
-            return true;
-        }
-        return false;
     }
 
     /**
